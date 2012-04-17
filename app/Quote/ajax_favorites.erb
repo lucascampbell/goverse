@@ -1,0 +1,7 @@
+<% @quotes.each do |quote| %>
+
+    <li onclick="switchQuoteImage(this,<%= quote.id %>,<%= quote.favorite_image %>)">
+  <img src="/public/photos/thumbs/<%= quote.favorite_image %>.jpg" style="top:0px;left:0px;height:40px;width:40px;border-radius:10px;"><span style="position:absolute;left:60px;top:2px;"><%= quote.quote %></span>
+    </li>
+
+<% end %>

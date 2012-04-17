@@ -1,0 +1,31 @@
+#sdk: "C:/RhoStudio/ruby/lib/ruby/gems/1.8/gems/rhodes-3.3.2"
+sdkversion: 3.3.2
+name: quotes
+version: 1.1332742911
+vendor: JS
+build: debug
+bbver: 4.6
+applog: rholog.txt
+iphone:
+  configuration: Release
+  sdk: iphonesimulator5.0
+  provisionprofile: 
+  codesignidentity: iPhone Developer
+  entitlements: 
+  BundleIdentifier: com.quotes
+  BundleURLScheme: quotes
+wp:
+  productid: b47fc940-4571-012f-6616-080027fd4ea2
+symbian:
+  uid: 4018615533
+android:
+  version: 2.1
+  push:
+  	sender: 
+  	notification: always
+extensions:
+  - json
+  - another-extension
+capabilities:
+  - push
+  - vibrate

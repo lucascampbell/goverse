@@ -1,0 +1,121 @@
+html {
+	height: 100%;
+-webkit-background-size: 100%;
+}
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+-webkit-background-size: 100%;
+}
+.content {
+-webkit-background-size: 100%;
+min-height: 100%;
+}
+#qpage {
+-webkit-background-size: 100%;
+ background: url(/public/photos/2.png) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	min-height: 100%;
+ }
+#qpage2 {
+-webkit-background-size: 100%;
+ background: url(/public/photos/1.png) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	min-height: 100%;
+ }
+#qpage3 {
+-webkit-background-size: 100%;
+ background: url(/public/photos/3.png) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	min-height: 100%;
+ }
+#qpage4 {
+-webkit-background-size: 100%;
+ background: url(/public/photos/4.png) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	min-height: 100%;
+ }
+#qpage5 {
+-webkit-background-size: 100%;
+ background: url(/public/photos/5.png) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	min-height: 100%;
+ }
+#qpage6 {
+-webkit-background-size: 100%;
+ background: url(/public/photos/6.png) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	min-height: 100%;
+ }
+#qpage7 {
+-webkit-background-size: 100%;
+ background: url(/public/photos/7.png) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	min-height: 100%;
+ }
+#qpage8 {
+-webkit-background-size: 100%;
+ background: url(/public/photos/8.png) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	min-height: 100%;
+ }
+#qpage9 {
+-webkit-background-size: 100%;
+ background: url(/public/photos/9.png) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	min-height: 100%;
+ }
+ .ui-content{
+ -webkit-background-size: 100%;
+background: transparent;
+background-color: transparent;
+}
+#quotescreen{
+-webkit-background-size: 100%;
+background: transparent;
+background-color: transparent;
+}
+ #quotediv{
+ text-shadow: 0.1em 0.1em 0.2em black;
+ 	background: transparent;
+ 	background-color: transparent;
+    position: fixed;
+    left: 50px;
+    bottom: 100px;
+    color: white;
+}
+ #touchdiv{
+position: fixed;
+top: 0px;
+left: 0px;
+width: 150px;
+height: 150px;
+}

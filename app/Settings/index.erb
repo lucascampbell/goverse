@@ -1,0 +1,18 @@
+<div data-role="page">
+
+  <div data-role="header" data-position="inline">
+    <h1>Settings</h1>
+  </div>
+
+  <div data-role="content">
+    <ul data-role="listview">
+      <% if @msg %>
+          <li class="error-message"><%= @msg %></li>
+      <% end %>
+
+
+      <li><a href="<%= url_for :action => :reset %>">Reset Database</a></li>
+     
+    </ul>
+  </div>
+</div>

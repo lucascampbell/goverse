@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>select photo</title>
+
+<style type="text/css" media="all">
+body,ul,li {
+  padding:0;
+  margin:0;
+  border:0;
+}
+
+body {
+  font-size:12px;
+  -webkit-user-select:none;
+    -webkit-text-size-adjust:none;
+  font-family:helvetica;
+}
+
+#header {
+  position:absolute;
+  top:0; left:0;
+  width:100%;
+  height:45px;
+  line-height:45px;
+  background-image:-webkit-gradient(linear, 0 0, 0 100%, color-stop(0, #fe96c9), color-stop(0.05, #d51875), color-stop(1, #7b0a2e));
+  background-image:-moz-linear-gradient(top, #fe96c9, #d51875 5%, #7b0a2e);
+  background-image:-o-linear-gradient(top, #fe96c9, #d51875 5%, #7b0a2e);
+  padding:0;
+  color:#eee;
+  font-size:20px;
+  text-align:center;
+}
+
+#header a {
+  color:#f3f3f3;
+  text-decoration:none;
+  font-weight:bold;
+  text-shadow:0 -1px 0 rgba(0,0,0,0.5);
+}
+
+#wrapper {
+  position:absolute; z-index:1;
+  top:0px; bottom:0; left:0;
+  width:100%;
+  overflow:auto;
+  background:#eee;
+}
+
+#scroller {
+  width:800px;
+  float:left;
+  padding:0;
+}
+
+#scroller ul {
+  list-style:none;
+  display:block;
+  float:left;
+  width:100%;
+  height:100%;
+  padding:0;
+  margin:0;
+  border:0px solid #aaa;
+}
+
+#scroller li {
+  display:block; float:left;
+  width:100px; height:100px; line-height:100px;
+  text-align:center;
+  border:0px solid #aaa;
+  background:#ccc;
+}
+
+</style>
+</head>
+<body>
+
+<div id="wrapper">
+  <div id="scroller">
+    <ul id="thelist">
+     <% img = 1 %>  
+     <% while img < 57 %>  
+      <li><a href="/app/Quote/{<%= @id %>,<%= img %>}/show_by_id"><img src="/public/photos/thumbs/<%= img.to_s %>.jpg" style="width: 100px;height 100px;"></a></li>
+      <% img += 1 %>
+     <% end %>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>

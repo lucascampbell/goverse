@@ -1,0 +1,205 @@
+#quotemenucontainer {
+display: none;
+position:absolute; z-index:1;
+top:45px; bottom:48px;
+left:40px;right:40px;
+overflow:auto;
+} 
+
+#header {
+  position:absolute; z-index:2;
+  top:0; left:0;
+  width:100%;
+  height:45px;
+  line-height:45px;
+  background-image:-webkit-gradient(linear, 0 0, 0 100%, color-stop(0, #aaaaaa), color-stop(0.05, #dddddd), color-stop(1, #fafafa));
+  background-image:-moz-linear-gradient(top, #fe96c9, #d51875 5%, #7b0a2e);
+  background-image:-o-linear-gradient(top, #fe96c9, #d51875 5%, #7b0a2e);
+  padding:0;
+  color:#eee;
+  font-size:20px;
+  text-align:center;
+  border-top-left-radius:20px;
+  border-top-right-radius:20px;
+  
+
+
+background-clip: border-box;
+background-color: #EEE;
+background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FDFDFD), to(#EEE));
+background-origin: padding-box;
+color: #444;
+cursor: pointer;
+display: block;
+font-family: Helvetica, Arial, sans-serif;
+font-size: 14px;
+font-weight: bold;
+margin-bottom: 0px;
+margin-left: 0px;
+margin-right: 0px;
+margin-top: 0px;
+padding-bottom: 0px;
+padding-left: 0px;
+padding-right: 0px;
+padding-top: 0px;
+position: relative;
+text-align: center;
+text-decoration: none;
+text-shadow: #F6F6F6 0px 1px 1px;
+}
+
+#quotemenu {
+position:absolute; z-index:1;
+top:45px; bottom:48px;
+left:0px;width:100%;
+  
+  overflow:auto;
+}
+
+#quotescroll {
+  position:absolute; z-index:1;
+/*  -webkit-touch-callout:none;*/
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+  width:100%;
+  padding:0;
+}
+
+#quotescroll ul {
+  list-style:none;
+  padding:0;
+  margin:0;
+  width:100%;
+  text-align:left;
+}
+
+#quotescroll li {
+  padding:0 10px;
+  height:40px;
+  line-height:40px;
+  border-bottom:1px solid #ccc;
+  border-top:1px solid #fff;
+  background-color:#fafafa;
+  font-size:14px;
+  overflow: hidden;
+  
+  
+-webkit-user-select: none;
+background-attachment: scroll;
+background-clip: border-box;
+background-color: #EEE;
+background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FDFDFD), to(#EEE));
+background-origin: padding-box;
+border-bottom-color: #CCC;
+border-bottom-style: solid;
+border-bottom-width: 0px;
+border-left-color: #CCC;
+border-left-style: solid;
+border-left-width: 1px;
+border-right-color: #CCC;
+border-right-style: solid;
+border-right-width: 1px;
+border-top-color: #CCC;
+border-top-style: solid;
+border-top-width: 1px;
+color: #444;
+cursor: pointer;
+display: block;
+font-family: Helvetica, Arial, sans-serif;
+font-size: 14px;
+font-weight: bold;
+margin-bottom: 0px;
+margin-right: 0px;
+margin-top: 0px;
+padding-bottom: 0px;
+padding-right: 0px;
+padding-top: 0px;
+position: relative;
+text-decoration: none;
+text-shadow: #F6F6F6 0px 1px 1px;
+}
+
+a {
+  font-size:14px;
+  color: black;
+  text-decoration: none;
+}
+
+#search {
+position:absolute;
+left:10px;right:10px;
+top:8px;
+height:30px;
+border:0px;
+border-radius:10px;
+font-size:18px;
+
+
+-webkit-appearance: none;
+-webkit-border-horizontal-spacing: 2px;
+-webkit-border-vertical-spacing: 2px;
+-webkit-box-shadow: rgba(0, 0, 0, 0.0976563) 0px 0px 3px 0px;
+-webkit-rtl-ordering: logical;
+-webkit-user-select: text;
+background-attachment: scroll;
+background-clip: border-box;
+background-color: transparent;
+background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F9F9F9), to(white));
+background-origin: padding-box;
+border-bottom-color: #999;
+border-bottom-left-radius: 6px;
+border-bottom-right-radius: 6px;
+border-bottom-style: solid;
+border-bottom-width: 1px;
+border-collapse: separate;
+border-left-color: #999;
+border-left-style: solid;
+border-left-width: 1px;
+border-right-color: #999;
+border-right-style: solid;
+border-right-width: 1px;
+border-top-color: #999;
+border-top-left-radius: 6px;
+border-top-right-radius: 6px;
+border-top-style: solid;
+border-top-width: 1px;
+box-shadow: rgba(0, 0, 0, 0.0976563) 0px 0px 3px 0px;
+box-sizing: border-box;
+color: black;
+cursor: auto;
+display: inline-block;
+font-family: Helvetica, Arial, Tahoma, sans-serif;
+font-size: 13px;
+font-style: normal;
+font-variant: normal;
+font-weight: normal;
+height: 26px;
+letter-spacing: normal;
+line-height: 13px;
+margin-bottom: 2px;
+margin-left: 0px;
+margin-right: 0px;
+margin-top: 2px;
+outline-color: black;
+outline-style: none;
+outline-width: 0px;
+padding-bottom: 4px;
+padding-left: 4px;
+padding-right: 4px;
+padding-top: 4px;
+text-align: -webkit-auto;
+text-indent: 0px;
+text-shadow: none;
+text-transform: none;
+white-space: nowrap;
+word-spacing: 0px;
+}
+
+#blind{
+position: fixed;
+left:0px;
+top:0px;
+width:100%;
+height:100%;
+background:black;
+z-index:9999999999999999999;
+}
