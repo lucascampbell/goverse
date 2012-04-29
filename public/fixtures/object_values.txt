@@ -1,0 +1,33 @@
+source_name|attrib|object|value
+Quote|quote|49000000000|He will command his angels concerning you to guard you in all your ways|
+Quote|id|49000000000|-1|
+Quote|book|49000000000|Psalms|
+Quote|abbreviation|49000000000|Ps|
+Quote|citation|49000000000|91:11|
+Quote|translation|49000000000|NIV|
+Quote|favorite|49000000000|false|
+Quote|topic_id|49000000000|59000000000|
+Topic|name|59000000000|Abuse|
+Topic|active|59000000000|false|
+Topic|name|59000000001|Academics|
+Topic|active|59000000001|true|
+Topic|name|59000000002|Beauty|
+Topic|active|59000000002|true|
+QuoteTag|quote_id|79000000000|49000000000|
+QuoteTag|tag_id|79000000000|69000000000|
+QuoteTag|quote_id|79000000001|49000000000|
+QuoteTag|tag_id|79000000001|69000000001|
+QuoteTag|quote_id|79000000002|49000000000|
+QuoteTag|tag_id|79000000002|69000000002|
+QuoteTag|quote_id|79000000003|49000000000|
+QuoteTag|tag_id|79000000003|69000000003|
+QuoteTag|quote_id|79000000004|49000000000|
+QuoteTag|tag_id|79000000004|69000000004|
+QuoteTag|quote_id|79000000005|49000000000|
+QuoteTag|tag_id|79000000005|69000000005|
+Tag|name|69000000000|tough stuff|
+Tag|name|69000000001|homelessness|
+Tag|name|69000000002|accidents|
+Tag|name|69000000003|pregnancy|
+Tag|name|69000000004|alcoholism|
+Tag|name|69000000005|conflict|
