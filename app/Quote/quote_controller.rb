@@ -10,35 +10,38 @@ class QuoteController < Rho::RhoController
   
   ### Used to be the splash screen, calling it init would be more appropriate
   def splash    
-    System.set_push_notification("/app/Quote/pushy", "") #Has to be set once
+    #System.set_push_notification("/app/Quote/pushy", "") #Has to be set once
     db_version = '2.12' #Increase number to cause database to be reloaded from /fixtures/object_values.txt; MAKE SURE TO SAVE FAVORITES AND OTHER USER DATA
-    live = Live.find(:first, :conditions => {:controller => 'App', :action => 'Init', :value => db_version})
-    if live.nil?
-      Rhom::Rhom.database_full_reset
+    #live = Live.find(:first, :conditions => {:controller => 'App', :action => 'Init', :value => db_version})
+    #live = Live.find(:first)
+    #if live.nil?
+      #Rhom::Rhom.database_full_reset
       Rho::RHO.load_all_sources()     
-      Rho::RhoUtils.load_offline_data(['object_values'])  #loads from /fixtures/object_values.txt       
-      Live.create(:controller => 'App', :action => 'Init', :value => db_version) #remember current db version in session model
+    
+      Rho::RhoUtils.load_offline_data(['object_values'], '../public')  #loads from /fixtures/object_values.txt       
+      #Live.create(:controller => 'App', :action => 'Init', :value => db_version) #remember current db version in session model
       
       ### Add some default favorites
-      quote = Quote.find(:first, :conditions => {:id => '10'})
-      quote.update_attributes(:favorite => 'y',:favorite_image => '44')
+      #quote = Quote.find(:first, :conditions => {:id => '1'}) #was 10
+      #quote = Quote.find(:first)
+      #quote.update_attributes(:favorite => 'y',:favorite_image => '44')
       
-      quote = Quote.find(:first, :conditions => {:id => '341'})
-      quote.update_attributes(:favorite => 'y',:favorite_image => '41')
-            
-      quote = Quote.find(:first, :conditions => {:id => '418'})
-      quote.update_attributes(:favorite => 'y',:favorite_image => '4')
-            
-      quote = Quote.find(:first, :conditions => {:id => '22'})
-      quote.update_attributes(:favorite => 'y',:favorite_image => '32')         
-    end               
+      # quote = Quote.find(:first, :conditions => {:id => '341'})
+      #       quote.update_attributes(:favorite => 'y',:favorite_image => '41')
+      #             
+      #       quote = Quote.find(:first, :conditions => {:id => '418'})
+      #       quote.update_attributes(:favorite => 'y',:favorite_image => '4')
+      #             
+      #       quote = Quote.find(:first, :conditions => {:id => '22'})
+      #       quote.update_attributes(:favorite => 'y',:favorite_image => '32')         
+    #end               
            
     redirect :action => :show_by_id             
   end
   
   ### This is the main method which shows the quote and photo screen
   def show_by_id    
-    System.set_application_icon_badge(0) # After a push-notification set a badge number, this will reset it; PUSH Not. and badge-resets should also be called by AJAX to avoid page reloads                 
+    #System.set_application_icon_badge(0) # After a push-notification set a badge number, this will reset it; PUSH Not. and badge-resets should also be called by AJAX to avoid page reloads                 
     parms = strip_braces(@params['id']) 
       
     ### This can use some cleaner error handling :-)   
@@ -51,18 +54,18 @@ class QuoteController < Rho::RhoController
     @image = parms[1]
     
     if @image.nil?      
-      @image = (rand(55) + 1).to_s
+      @image = '1'#(rand(55) + 1).to_s
     end
     if @id.nil?      
-      @id = (rand(1000) + 1).to_s
+      @id = '1'#(rand(1000) + 1).to_s
     end    
     
     ### Find the specified quote
-    @quote = Quote.find(:first,:conditions => {:id => @id})
+    @quote = Quote.find(:first,:conditions => {:object => @id})
       
     ### Quote ids are allowed to seized to exist, this will assure a quote is select; optional: inform user     
     while @quote.nil?
-      @quote = Quote.find(:first,:conditions => {:id => rand(1000)})
+      @quote = Quote.find(:first)#Quote.find(:first,:conditions => {:id => rand(1000)})
     end
     
     ### Select quotes in the same topic to fill the carousel; optional: randomize, prioritize and limit the order and amount of quotes
@@ -70,7 +73,7 @@ class QuoteController < Rho::RhoController
       
     
     ### Select available topics for the menu; optional: Filter sensitive topics
-    @topics = Topic.find(:all,:order=>'name')    
+    @topics = Topic.find_active  
     
     ### Done
     render :action => :show_by_id, :layout => false
@@ -83,35 +86,33 @@ class QuoteController < Rho::RhoController
     #Alert.show_popup('push_notify: ' + @params.inspect)
   end
   
+  
   ### Return search results to on-screen list 
   def search_result
-    @tag = @params['tag']
-    @tag = @tag.downcase
-    
-    tag_id = Tag.find(:first,:conditions => {:name => @tag})      
-      
-    ### Decide whether to pull up quotes or display empty search result page..
-    if not tag_id.nil?            
-      tag_id = tag_id.id
-      
-      ### Find associated quote_id with tag_id through join-table    
-      quotetags = QuoteTag.find(:all,:conditions => {:tag_id => tag_id})
-        
-      ### Prepare array with quote_ids      
-      ids = Array.new
-      quotetags.each do |qt|
-        ids << qt.quote_id
-      end
-      
-      ### Use advanced RHOM statement to find quotes through the quote_id array, rails has habtm relationship (should be reimplemented here)
-        @quotes = Quote.find(:all,:conditions => {{
-          :name => "id", 
-          :op => "IN" 
-        } => ids })          
-        
-      render :action=>:search_result, :layout => false
+    #if nothing passed return active topics
+    if @params["tag"] == ""
+      @topics = Topic.find_active 
+      render :action => :ajax_topics, :layout => false
     else
-      render :action =>:search_empty, :layout => false
+      #search quote tags first
+      tag_name = @params["tag"].downcase
+      tag = Tag.find(:first,:conditions => {:name => tag_name})      
+      ids = nil
+          
+      @quotes = QuoteTag.get_quotes_by_tag(tag.object) if tag
+      
+      #get ids from first search and pass to second query so as not to get duplicates  
+      ids = @quotes.collect(&:object) unless @quotes.nil?
+     
+      q2 = Quote.find_by_exclusive(@params["tag"],ids) if ids
+      @quotes = Quote.find_by_string(@params["tag"]) unless ids
+      @quotes << q2 if (q2 and !q2.empty?)
+  
+      if @quotes
+        render :action=>:search_result, :layout => false
+      else
+        render :action =>:search_empty, :layout => false
+      end
     end
   end
    
@@ -194,7 +195,7 @@ class QuoteController < Rho::RhoController
   
   ### Provide list of available topics for on-screen browsing menu
   def ajax_topics
-    @topics = Topic.find(:all,:order=>'name')  
+    @topics = Topic.find_active
     render :action => :ajax_topics, :layout => false
   end
   

@@ -3,7 +3,7 @@ require 'rho/rhoutils'
 # You can add more methods here
 class Quote
   include Rhom::PropertyBag
- 
+  #has_many :topics
    # Uncomment the following line to enable sync with Product.
    # enable :sync
   #property :id, :string
@@ -25,4 +25,27 @@ class Quote
   # enable :sync
 
   #add model specifc code here
+  
+  def self.find_by_exclusive(search_word,ids=[])
+    Quote.find(:all,:conditions=>{
+              {
+                :name => "quote",
+                :op    => "LIKE"
+              } => "%#{search_word}%",
+              {
+                :name => "object",
+                :op   =>  "NOT IN"
+              } => ids
+    })
+  end
+  
+  def self.find_by_string(search_word)
+    Quote.find(:all,:conditions=>{
+              {
+                :name => "quote",
+                :op    => "LIKE"
+              } => "%#{search_word}%"
+    })
+  end
+  
 end

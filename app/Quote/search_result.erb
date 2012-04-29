@@ -1,5 +1,3 @@
-<% count = 1 %>
-  <% @quotes.each do |quote| %>
-    <li onclick="switchQuote(this,<%= quote.id %>);"><%= count %>. <%= quote.quote %></li>    
-  <% count += 1 %>          
-  <% end %>
+<% @quotes.each_with_index do |quote,index| %>
+  <li onclick="switchQuote(this,<%= quote.object %>);"><%= index + 1 %>. <%= quote.quote %></li>              
+<% end %>

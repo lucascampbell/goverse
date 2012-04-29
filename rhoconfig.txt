@@ -63,7 +63,7 @@ disable_loading_indication = 1
 # Port of the local (embedded) HTTP server. This parameter is mainly for debug purposes.
 # If not specified, application will use dynamically selected one.
 # WARNING!!! Remove this parameter before put application to production.
-#local_server_port = 8080
+local_server_port = 8080
 
 # show status bar on windows mobile. default 1
 #wm_show_statusbar = 1

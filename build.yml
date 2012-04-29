@@ -1,4 +1,4 @@
-#sdk: "C:/RhoStudio/ruby/lib/ruby/gems/1.8/gems/rhodes-3.3.2"
+sdk: "/Users/lucascampbell-rossen/rhomobile/rhodes"
 sdkversion: 3.3.2
 name: quotes
 version: 1.1332742911
@@ -7,8 +7,8 @@ build: debug
 bbver: 4.6
 applog: rholog.txt
 iphone:
-  configuration: Release
-  sdk: iphonesimulator5.0
+  configuration: Debug
+  sdk: iphonesimulator5.1
   provisionprofile: 
   codesignidentity: iPhone Developer
   entitlements: 

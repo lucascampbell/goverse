@@ -7,4 +7,8 @@ class QuoteTag
   # enable :sync
 
   #add model specifc code here
+  def self.get_quotes_by_tag(tag_id)
+    ids = QuoteTag.find(:all,:conditions => {:tag_id => tag_id}).collect(&:quote_id)
+    Quote.find(:all,:conditions => {{:name => "object", :op => "IN" } => ids })
+  end
 end
