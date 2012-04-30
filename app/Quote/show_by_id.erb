@@ -62,7 +62,7 @@
         <ul id="thelist">
           <% @topics.each do |topic| %>    
             <% quote = Quote.find(:first,:conditions => {:topic_id => topic.id}) %>
-            <li onclick="switchTopic(this,<%= topic.id %>);"><%= topic.name %></li>
+            <li onclick="switchTopic(this,<%= topic.object %>);"><%= topic.name %></li>
           <% end %>
         </ul>
       </div>

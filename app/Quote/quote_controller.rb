@@ -159,18 +159,19 @@ class QuoteController < Rho::RhoController
       parms = '0,1'
     end
     parms = parms.split(',')
-    @id = parms[0]
+    id = parms[0]
     @image = parms[1]
     if @image.nil?      
-      @image = (rand(55) + 1).to_s
+      @image = "1"#(rand(55) + 1).to_s
     end
     
-    @quote = Quote.find(:first,:conditions => {:id => @id})     
-    while @quote.nil?
-      @quote = Quote.find(:first,:conditions => {:id => rand(1000)})
+    @quote = Quote.find(:first,:conditions => {:object => id})   
+    puts "quote is #{@quote}"  
+    if @quote.nil?
+      @quote = Quote.find(:first)#Quote.find(:first,:conditions => {:id => rand(1000)})
     end
     
-    @quotes = Quote.find(:all, :conditions => {:topic_id => @quote.topic_id})                   
+    @quotes = Quote.find_by_topic(@quote.topic_id)               
     
     ### Switch to using built-in render json function
     render :action => :json, :layout => false
@@ -179,18 +180,14 @@ class QuoteController < Rho::RhoController
   
   ### Return list of quotes within a topic to populate browsing-list 
   def json_by_topic_id
-    parms = strip_braces(@params['id'])  
+    topic_id = strip_braces(@params['id'])  
         
-    if parms.nil? # Clean up error-handling :-)
-      parms = '1'
-    end
+    #revert to first topic if nothing passed    
+    topic_id = '1' if topic_id.nil?
     
-    @topic_id = parms
-    
-    @quotes = Quote.find(:all,:conditions => {:topic_id => @topic_id})                   
+    @quotes = Quote.find_by_topic(topic_id)               
     
     render :action => :json_by_topic_id, :layout => false
-    
   end  
   
   ### Provide list of available topics for on-screen browsing menu

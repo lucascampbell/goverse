@@ -48,4 +48,8 @@ class Quote
     })
   end
   
+  def self.find_by_topic(topic_id)
+    Quote.find(:all,:conditions => {:topic_id => topic_id})   
+  end
+  
 end

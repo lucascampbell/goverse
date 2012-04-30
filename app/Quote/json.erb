@@ -2,15 +2,13 @@
       {
         "text": "<%= strip_ticks(@quote.quote) %><br><span style='text-align:left;font-size: 9px'><%= strip_ticks(@quote.book) %> <%= strip_ticks(@quote.citation) %></span>",
         "favorite": "<%= @quote.favorite %>",
-        "id": "<%= @quote.id %>"
+        "id": "<%= @quote.object %>"
       },
         
-      <% @quotes.each do |quote| %>
-  
-               
+      <% @quotes.each do |quote| %>        
          { "text": "<%= strip_ticks(quote.quote) %><br><span style='text-align:left;font-size: 9px'><%= strip_ticks(quote.book) %> <%= strip_ticks(quote.citation) %></span>",
         "favorite": "<%= quote.favorite %>",        
-         "id": "<%= quote.id %>"
+         "id": "<%= quote.object %>"
       }<% if not @quotes.last == quote %>,<% end %>
         <% end %>    
-    ]
+]

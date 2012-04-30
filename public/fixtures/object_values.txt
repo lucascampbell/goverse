@@ -6,7 +6,39 @@ Quote|abbreviation|49000000000|Ps|
 Quote|citation|49000000000|91:11|
 Quote|translation|49000000000|NIV|
 Quote|favorite|49000000000|false|
-Quote|topic_id|49000000000|59000000000|
+Quote|topic_id|49000000000|59000000002|
+Quote|quote|49000000004|God has endowed man with inalienable rights, among which are self-government, reason, and conscience. Man is properly self-governed only when he is guided rightly and governed by his Maker, divine Truth and Love.|
+Quote|id|49000000004|-1|
+Quote|book|49000000004|Science and Health|
+Quote|abbreviation|49000000004|SH|
+Quote|citation|49000000004|106:7|
+Quote|translation|49000000004||
+Quote|favorite|49000000004|false|
+Quote|topic_id|49000000004|59000000002|
+Quote|quote|49000000001|Study to shew thyself approved unto God, a workman that needeth not to be ashamed, rightly dividing the word of truth.|
+Quote|id|49000000001|-1|
+Quote|book|49000000001|ll Tim|
+Quote|abbreviation|49000000001|ll Timothy|
+Quote|citation|49000000001|2:15|
+Quote|translation|49000000001|KJV|
+Quote|favorite|49000000001|false|
+Quote|topic_id|49000000001|59000000001|
+Quote|quote|49000000002|We understand best that which begins in ourselves and by education brightens into birth.|
+Quote|id|49000000002|-1|
+Quote|book|49000000002|The First Church of Christ, Scientist, and Miscellany|
+Quote|abbreviation|49000000002|my|
+Quote|citation|49000000002|253:26|
+Quote|translation|49000000002||
+Quote|favorite|49000000002|false|
+Quote|topic_id|49000000002|59000000001|
+Quote|quote|49000000003|All education should contribute to moral and physical strength and freedom.|
+Quote|id|49000000003|-1|
+Quote|book|49000000003|Miscellaneous Writings|
+Quote|abbreviation|49000000003|mis|
+Quote|citation|49000000003|240:11-12|
+Quote|translation|49000000003||
+Quote|favorite|49000000003|false|
+Quote|topic_id|49000000003|59000000001|
 Topic|name|59000000000|Abuse|
 Topic|active|59000000000|false|
 Topic|name|59000000001|Academics|
@@ -25,9 +57,39 @@ QuoteTag|quote_id|79000000004|49000000000|
 QuoteTag|tag_id|79000000004|69000000004|
 QuoteTag|quote_id|79000000005|49000000000|
 QuoteTag|tag_id|79000000005|69000000005|
+QuoteTag|quote_id|79000000006|49000000001|
+QuoteTag|tag_id|79000000006|69000000006|
+QuoteTag|quote_id|79000000007|49000000001|
+QuoteTag|tag_id|79000000007|69000000007|
+QuoteTag|quote_id|79000000008|49000000001|
+QuoteTag|tag_id|79000000008|69000000008|
+QuoteTag|quote_id|79000000009|49000000001|
+QuoteTag|tag_id|79000000009|69000000009|
+QuoteTag|quote_id|79000000010|49000000001|
+QuoteTag|tag_id|79000000010|69000000010|
+QuoteTag|quote_id|79000000011|49000000001|
+QuoteTag|tag_id|79000000011|69000000011|
+QuoteTag|quote_id|79000000012|49000000001|
+QuoteTag|tag_id|79000000012|69000000012|
+QuoteTag|quote_id|79000000013|49000000001|
+QuoteTag|tag_id|79000000013|69000000013|
+QuoteTag|quote_id|79000000014|49000000001|
+QuoteTag|tag_id|79000000014|69000000014|
+QuoteTag|quote_id|79000000015|49000000001|
+QuoteTag|tag_id|79000000015|69000000015|
 Tag|name|69000000000|tough stuff|
 Tag|name|69000000001|homelessness|
 Tag|name|69000000002|accidents|
 Tag|name|69000000003|pregnancy|
 Tag|name|69000000004|alcoholism|
 Tag|name|69000000005|conflict|
+Tag|name|69000000006|approval|
+Tag|name|69000000007|work|
+Tag|name|69000000008|jobs|
+Tag|name|69000000009|performance|
+Tag|name|69000000010|school|
+Tag|name|69000000011|academics|
+Tag|name|69000000012|cheating|
+Tag|name|69000000013|peer|
+Tag|name|69000000014|pressure|
+Tag|name|69000000015|pornography|
