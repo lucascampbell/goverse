@@ -12,7 +12,7 @@ iphone:
   provisionprofile: 
   codesignidentity: iPhone Developer
   entitlements: 
-  BundleIdentifier: com.quotes
+  BundleIdentifier: com.moc.quoto
   BundleURLScheme: quotes
 wp:
   productid: b47fc940-4571-012f-6616-080027fd4ea2

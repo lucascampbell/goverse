@@ -11,9 +11,11 @@
   <link rel="stylesheet" href="/public/jqmobile/jquery.mobile-1.0.1.min.css">
   <link href="/public/css/iphone.css" type="text/css" rel="stylesheet"/>
   <link href="/public/css/onscreenmenu.css" rel="stylesheet" type="text/css">
+  <link href="/public/css/application.css" rel="stylesheet" type="text/css">
   <script src="/public/jquery/jquery-1.6.4.min.js" type="text/javascript"></script>
-  <script src="/public/js/iscroll-lite.js" type="text/javascript"></script>
+  
   <script type="text/javascript" src="/public/js/swipeviewxy.js"></script>
+  <script src="/public/js/iscroll-lite.js" type="text/javascript"></script>
   <script type="text/javascript" src="/public/js/application.js"></script>
 
    <!-- currently this analytics account is my own -->
@@ -36,19 +38,17 @@
   <script type="text/javascript">
     //On-Screen Menu
     var myScroll;
+    var imagesScroll;
     function loaded() {
-      myScroll = new iScroll('quotemenu');
+       myScroll     = new iScroll('quotemenu',{bounce:false, hScroll:false, hScrollbar:false});
+ 	   imagesScroll = new iScroll('wrapperimages',{bounce:false, hScroll:false, hScrollbar:false}); 
     }
     
     document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
     
     document.addEventListener('DOMContentLoaded', loaded, false);
-  
   </script>
 
-
-
-  
 </head>
 
 <body>
@@ -61,7 +61,7 @@
       <div id="quotescroll">
         <ul id="thelist">
           <% @topics.each do |topic| %>    
-            <% quote = Quote.find(:first,:conditions => {:topic_id => topic.id}) %>
+            <%# quote = Quote.find(:first,:conditions => {:topic_id => topic.id}) %>
             <li onclick="switchTopic(this,<%= topic.object %>);"><%= topic.name %></li>
           <% end %>
         </ul>
@@ -70,6 +70,14 @@
   </div>
     
   <div id="wrapper"></div>
+
+  <!--div to load images into with iscroll -->
+  <div id='wcontainer'>
+    <div id="wrapperimages">
+      <div id="wscroll">
+      </div>
+    </div>
+  </div>
 
   <div id="menu" style="position: absolute;">  
     <div data-role="controlgroup" class="ui-corner-all ui-controlgroup ui-controlgroup-vertical">
@@ -80,7 +88,7 @@
           <a href="" id="choosephoto" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Select Photo</span></span></a>
           <a href="" id="newsubmit" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">My Quotes</span></span></a>                        
           <a href="" id="backtoquote" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-bottom ui-controlgroup-last ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom ui-controlgroup-last"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Close Menu</span></span></a>
-    </div>  
+    </div>
   </div>
   
 <script>
@@ -116,18 +124,16 @@
       id: '<%= @image %>'   
     },
     <% img = 1 %>     
-    <% while img < 55 %>    
+    <% while img < Live.live.image_count.to_i %>    
     {
       img: '/public/photos/<%= img.to_s %>.jpg',
       width: $('#wrapper').width(),
       height: $('#wrapper').height(), 
       id: '<%= img.to_s %>'
     }
-    <% img = img + 1 %>
-    <% if img < 55 %>
-    ,
-  <% end %>
-  <% end %>
+      <% img += 1 %>
+      <% if img < Live.live.image_count.to_i %>,<% end %>
+    <% end %>
   
   ];
       

@@ -1,0 +1,5 @@
+<% Live.live.image_count.to_i.times do |i| %>
+  <%= ( i % @breaks == 0) ? "<ul style='padding: 0 #{@padding}px 0 #{@padding}px'>" : "" %>
+	<li style="height:<%=@width%>px;width:<%=@width%>px" onclick='swap_image(<%=i+1%>);return false;'><img src="/public/photos/<%= i + 1 %>.jpg" width='<%=@width%>' height='<%=@width%>'/></li>
+	<%= ((i+1) % @breaks == 0) ? "</ul>" : "" %>
+<% end %>

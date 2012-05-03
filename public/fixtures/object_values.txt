@@ -1,4 +1,5 @@
 source_name|attrib|object|value
+Live|image_count|39000000000|18|
 Quote|quote|49000000000|He will command his angels concerning you to guard you in all your ways|
 Quote|id|49000000000|-1|
 Quote|book|49000000000|Psalms|

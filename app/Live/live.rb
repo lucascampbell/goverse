@@ -9,4 +9,7 @@ class Live
   # enable :sync
 
   #add model specifc code here
+  class << self
+    attr_accessor :live
+  end
 end

@@ -9,42 +9,42 @@ class QuoteController < Rho::RhoController
  
   
   ### Used to be the splash screen, calling it init would be more appropriate
-  def splash    
-    #System.set_push_notification("/app/Quote/pushy", "") #Has to be set once
-    db_version = '2.12' #Increase number to cause database to be reloaded from /fixtures/object_values.txt; MAKE SURE TO SAVE FAVORITES AND OTHER USER DATA
-    #live = Live.find(:first, :conditions => {:controller => 'App', :action => 'Init', :value => db_version})
-    #live = Live.find(:first)
-    #if live.nil?
-      #Rhom::Rhom.database_full_reset
-      Rho::RHO.load_all_sources()     
-    
-      Rho::RhoUtils.load_offline_data(['object_values'], '../public')  #loads from /fixtures/object_values.txt       
-      #Live.create(:controller => 'App', :action => 'Init', :value => db_version) #remember current db version in session model
-      
-      ### Add some default favorites
-      #quote = Quote.find(:first, :conditions => {:id => '1'}) #was 10
-      #quote = Quote.find(:first)
-      #quote.update_attributes(:favorite => 'y',:favorite_image => '44')
-      
-      # quote = Quote.find(:first, :conditions => {:id => '341'})
-      #       quote.update_attributes(:favorite => 'y',:favorite_image => '41')
-      #             
-      #       quote = Quote.find(:first, :conditions => {:id => '418'})
-      #       quote.update_attributes(:favorite => 'y',:favorite_image => '4')
-      #             
-      #       quote = Quote.find(:first, :conditions => {:id => '22'})
-      #       quote.update_attributes(:favorite => 'y',:favorite_image => '32')         
-    #end               
-           
-    redirect :action => :show_by_id             
-  end
+  # def splash    
+  #   #System.set_push_notification("/app/Quote/pushy", "") #Has to be set once
+  #   db_version = '2.12' #Increase number to cause database to be reloaded from /fixtures/object_values.txt; MAKE SURE TO SAVE FAVORITES AND OTHER USER DATA
+  #   live = Live.find(:first, :conditions => {:controller => 'App', :action => 'Init', :value => db_version})
+  #   #live = Live.find(:first)
+  #   if live.nil?
+  #     #Rhom::Rhom.database_full_reset
+  #     Rho::RHO.load_all_sources()     
+  #   
+  #     Rho::RhoUtils.load_offline_data(['object_values'], '../public')  #loads from /fixtures/object_values.txt       
+  #     Live.create(:controller => 'App', :action => 'Init', :value => db_version) #remember current db version in session model
+  #     
+  #     ### Add some default favorites
+  #     #quote = Quote.find(:first, :conditions => {:id => '1'}) #was 10
+  #     #quote = Quote.find(:first)
+  #     #quote.update_attributes(:favorite => 'y',:favorite_image => '44')
+  #     
+  #     # quote = Quote.find(:first, :conditions => {:id => '341'})
+  #     #       quote.update_attributes(:favorite => 'y',:favorite_image => '41')
+  #     #             
+  #     #       quote = Quote.find(:first, :conditions => {:id => '418'})
+  #     #       quote.update_attributes(:favorite => 'y',:favorite_image => '4')
+  #     #             
+  #     #       quote = Quote.find(:first, :conditions => {:id => '22'})
+  #     #       quote.update_attributes(:favorite => 'y',:favorite_image => '32')         
+  #   end               
+  #          
+  #   #redirect :action => :show_by_id             
+  # end
   
-  ### This is the main method which shows the quote and photo screen
-  def show_by_id    
+  # This is the main method which shows the quote and photo screen
+  def show_by_id
     #System.set_application_icon_badge(0) # After a push-notification set a badge number, this will reset it; PUSH Not. and badge-resets should also be called by AJAX to avoid page reloads                 
     parms = strip_braces(@params['id']) 
       
-    ### This can use some cleaner error handling :-)   
+    # This can use some cleaner error handling :-)   
     if parms.nil?
       parms =  ','
     end
@@ -54,31 +54,27 @@ class QuoteController < Rho::RhoController
     @image = parms[1]
     
     if @image.nil?      
-      @image = '1'#(rand(55) + 1).to_s
+      @image = (rand(Live.live.image_count.to_i) + 1).to_s
     end
     if @id.nil?      
       @id = '1'#(rand(1000) + 1).to_s
     end    
     
-    ### Find the specified quote
+    # Find the specified quote
     @quote = Quote.find(:first,:conditions => {:object => @id})
       
-    ### Quote ids are allowed to seized to exist, this will assure a quote is select; optional: inform user     
+    # Quote ids are allowed to seized to exist, this will assure a quote is select; optional: inform user     
     while @quote.nil?
       @quote = Quote.find(:first)#Quote.find(:first,:conditions => {:id => rand(1000)})
     end
     
-    ### Select quotes in the same topic to fill the carousel; optional: randomize, prioritize and limit the order and amount of quotes
+    # Select quotes in the same topic to fill the carousel; optional: randomize, prioritize and limit the order and amount of quotes
     @quotes = Quote.find(:all, :conditions => {:topic_id => @quote.topic_id})
       
-    
-    ### Select available topics for the menu; optional: Filter sensitive topics
+    # Select available topics for the menu; optional: Filter sensitive topics
     @topics = Topic.find_active  
-    
-    ### Done
     render :action => :show_by_id, :layout => false
-    
-  end  
+  end 
   
   ### This is the Push-Notification callback method  
   def pushy
@@ -116,33 +112,36 @@ class QuoteController < Rho::RhoController
     end
   end
    
-  ### Set favorite; setting and unsetting favorite should be decoupled from showing favorites
+  # Set favorite; setting and unsetting favorite should be decoupled from showing favorites
   def set_favorite
     parms = strip_braces(@params['id'])       
     if parms.nil?
       parms = '0,1'
     end
+    
     parms = parms.split(',')
     id = parms[0]
-    image = parms[1]        
+    image = parms[1]    
+        
     if image.nil?      
-      image = '7'
+      image = '1'
     end  
-    quote = Quote.find(:first, :conditions => {:id => id})
-    quote.update_attributes(:favorite => 'y', :favorite_image => image)    
+    
+    quote = Quote.find(id)
+    quote.update_attributes(:favorite => 'y',:favorite_image => image)
     redirect :action => :ajax_favorites
   end
   
   def unset_favorite 
     id = strip_braces(@params['id'])    
-    quote = Quote.find(:first, :conditions => {:id => id})
+    quote = Quote.find(id)
     quote.update_attributes(:favorite => 'n')    
     redirect :action => :ajax_favorites
   end    
 
   ### This is the only page not loaded by ajax; also the view needs better performance
   def photos
-    @id = strip_braces(@params['id'])
+    Quote.quote_id = strip_braces(@params['id'])
     render :layout => false
   end
   
@@ -150,33 +149,45 @@ class QuoteController < Rho::RhoController
   # The rest are all methods returning json to the show_by_id webview
   # 
   
+  def ajax_quote
+    puts "inside a quote paras are #{@params}"
+    id = strip_braces(@params['id'])
+    puts "id is #{id}"
+    @quote = Quote.find(id)
+    puts "quote found -- #{@quote}"
+    @quote = Quote.find(:first)  if @quote.nil?
+    @quotes = Quote.find_by_topic(@quote.topic_id)
+    render :action => :ajax_quote, :layout => false
+  end
+  
   ### Return a quote and its associated topic-buddies by json after it is discovered by browsing or searching
   ### Here is opportunity to DRY by consolidating some of the repeated code from show_by_id into an helper method
-  def json
-    parms = strip_braces(@params['id']) 
-         
-    if parms.nil?
-      parms = '0,1'
-    end
-    parms = parms.split(',')
-    id = parms[0]
-    @image = parms[1]
-    if @image.nil?      
-      @image = "1"#(rand(55) + 1).to_s
-    end
-    
-    @quote = Quote.find(:first,:conditions => {:object => id})   
-    puts "quote is #{@quote}"  
-    if @quote.nil?
-      @quote = Quote.find(:first)#Quote.find(:first,:conditions => {:id => rand(1000)})
-    end
-    
-    @quotes = Quote.find_by_topic(@quote.topic_id)               
-    
-    ### Switch to using built-in render json function
-    render :action => :json, :layout => false
-    
-  end   
+  # def json
+  #    puts "inside json action params are -- #{@params}"
+  #    parms = strip_braces(@params['id']) 
+  #         
+  #    if parms.nil?
+  #      parms = '0,1'
+  #    end
+  #    parms = parms.split(',')
+  #    id = parms[0]
+  #    @image = parms[1]
+  #    if @image.nil? 
+  #      @image = (rand(Live.live.image_count.to_i) + 1).to_s
+  #    end
+  #    
+  #    @quote = Quote.find(:first,:conditions => {:object => id})   
+  #    puts "quote is #{@quote}"  
+  #    if @quote.nil?
+  #      @quote = Quote.find(:first)#Quote.find(:first,:conditions => {:id => rand(1000)})
+  #    end
+  #    
+  #    @quotes = Quote.find_by_topic(@quote.topic_id)               
+  #    
+  #    ### Switch to using built-in render json function
+  #    render :action => :json, :layout => false
+  #    
+  #  end   
   
   ### Return list of quotes within a topic to populate browsing-list 
   def json_by_topic_id
@@ -198,8 +209,17 @@ class QuoteController < Rho::RhoController
   
   ### Populate favorites-list when show-favorites is called
   def ajax_favorites
-    @quotes = Quote.find(:all, :conditions => {:favorite=>'y'})  
+    @quotes = Quote.find_all_favorites
+    puts "favorite found #{@quotes}"
     render :action => :ajax_favorites, :layout => false
+  end
+  
+  def ajax_images
+    w = @params['width'].to_i
+    @width = w > 320 ? 200 : 100
+    @padding = (w % @width) / 2
+    @breaks = w/@width.floor
+    render :layout => false
   end
  
 end

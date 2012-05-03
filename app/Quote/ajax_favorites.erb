@@ -1,7 +1,13 @@
-<% @quotes.each do |quote| %>
-
-    <li onclick="switchQuoteImage(this,<%= quote.object %>,<%= quote.favorite_image %>)">
-  <img src="/public/photos/thumbs/<%= quote.favorite_image %>.jpg" style="top:0px;left:0px;height:40px;width:40px;border-radius:10px;"><span style="position:absolute;left:60px;top:2px;"><%= quote.quote %></span>
-    </li>
-
-<% end %>
+<%unless @quotes.empty? %>
+    
+	<div class="content-primary">	
+	<ul data-role="listview" data-inset="true" data-split-theme="d">
+	<% @quotes.each do |quote| %>
+	    <li onclick="switchQuoteImage(this,<%= quote.object %>,<%= quote.favorite_image %>)">
+	      <img src="/public/photos/<%= quote.favorite_image %>.jpg" width='40px' height='39px'>
+	      <span style="position:absolute;left:60px;top:2px;"><%= quote.quote %></span>
+	    </li>
+	<% end %>
+	</ul>
+	</div><!--/content-primary -->
+<%end%>

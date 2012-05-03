@@ -25,6 +25,9 @@ class Quote
   # enable :sync
 
   #add model specifc code here
+  class << self
+    attr_accessor :quote_id
+  end
   
   def self.find_by_exclusive(search_word,ids=[])
     Quote.find(:all,:conditions=>{
@@ -50,6 +53,10 @@ class Quote
   
   def self.find_by_topic(topic_id)
     Quote.find(:all,:conditions => {:topic_id => topic_id})   
+  end
+  
+  def self.find_all_favorites
+    Quote.find(:all,:conditions => {:favorite => 'y'})
   end
   
 end
