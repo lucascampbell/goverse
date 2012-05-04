@@ -59,4 +59,19 @@ class Quote
     Quote.find(:all,:conditions => {:favorite => 'y'})
   end
   
+  def topic_quotes
+    Quote.find(:all,:conditions=>{
+              {
+                :name => 'topic_id',
+                :op   => '='
+              } => self.topic_id,
+              {
+                :name => "object",
+                :op    => "<>"
+              } => self.object
+            },
+            :op => 'AND'
+    )
+  end
+  
 end

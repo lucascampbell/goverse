@@ -230,8 +230,8 @@ function switchQuote(that,id) {
     $('#quotemenucontainer').hide();
             
     for (i=0; i<3; i++) {
-        page = i==0 ? slides.length-1 : 1;
-        if (i == carousel.currentMasterPage) { page = 0;}
+        page = i==0 ? slides.length-1 : i-1;
+        //if (i == carousel.currentMasterPage) { page = 0;}
         el = carousel.masterPages[i].querySelector('span');        
         el.css = "text-align:left;";
         el.innerHTML = slides[page].text;

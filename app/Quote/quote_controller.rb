@@ -49,6 +49,7 @@ class QuoteController < Rho::RhoController
       parms =  ','
     end
     
+    # swipe view _resize passes quote_id,image_id to this function so params are split
     parms = parms.split(',')
     @id = parms[0]
     @image = parms[1]
@@ -57,20 +58,20 @@ class QuoteController < Rho::RhoController
       @image = (rand(Live.live.image_count.to_i) + 1).to_s
     end
     if @id.nil?      
-      @id = '1'#(rand(1000) + 1).to_s
+      @id = '49000000000'#(rand(1000) + 1).to_s
     end    
     
     # Find the specified quote
     @quote = Quote.find(:first,:conditions => {:object => @id})
-      
+    
     # Quote ids are allowed to seized to exist, this will assure a quote is select; optional: inform user     
-    while @quote.nil?
+    if @quote.nil?
       @quote = Quote.find(:first)#Quote.find(:first,:conditions => {:id => rand(1000)})
     end
-    
+    puts "quote found is #{@quote}"
     # Select quotes in the same topic to fill the carousel; optional: randomize, prioritize and limit the order and amount of quotes
-    @quotes = Quote.find(:all, :conditions => {:topic_id => @quote.topic_id})
-      
+    @quotes = @quote.topic_quotes
+    puts "quotes found are -- #{@quotes}"
     # Select available topics for the menu; optional: Filter sensitive topics
     @topics = Topic.find_active  
     render :action => :show_by_id, :layout => false
@@ -140,23 +141,22 @@ class QuoteController < Rho::RhoController
   end    
 
   ### This is the only page not loaded by ajax; also the view needs better performance
-  def photos
-    Quote.quote_id = strip_braces(@params['id'])
-    render :layout => false
-  end
+  # def photos
+  #     Quote.quote_id = strip_braces(@params['id'])
+  #     render :layout => false
+  #   end
   
   #
   # The rest are all methods returning json to the show_by_id webview
   # 
   
   def ajax_quote
-    puts "inside a quote paras are #{@params}"
     id = strip_braces(@params['id'])
-    puts "id is #{id}"
     @quote = Quote.find(id)
-    puts "quote found -- #{@quote}"
+    puts "quote found by id are -- #{@quote}"
     @quote = Quote.find(:first)  if @quote.nil?
-    @quotes = Quote.find_by_topic(@quote.topic_id)
+    @quotes = @quote.topic_quotes
+    puts "quotes found are -- #{@quotes}"
     render :action => :ajax_quote, :layout => false
   end
   
