@@ -68,6 +68,9 @@ class QuoteController < Rho::RhoController
     ### Select quotes in the same topic to fill the carousel; optional: randomize, prioritize and limit the order and amount of quotes
     @quotes = Quote.find(:all, :conditions => {:topic_id => @quote.topic_id})
       
+    ### Find topic name  
+    topic = Topic.find(:first, :conditions => {:id => @quote.topic_id})
+    @topic = topic.name 
     
     ### Select available topics for the menu; optional: Filter sensitive topics
     @topics = Topic.find(:all,:order=>'name')    
@@ -129,14 +132,14 @@ class QuoteController < Rho::RhoController
     end  
     quote = Quote.find(:first, :conditions => {:id => id})
     quote.update_attributes(:favorite => 'y', :favorite_image => image)    
-    redirect :action => :ajax_favorites
+    render :string => 'ok'
   end
   
   def unset_favorite 
     id = strip_braces(@params['id'])    
     quote = Quote.find(:first, :conditions => {:id => id})
     quote.update_attributes(:favorite => 'n')    
-    redirect :action => :ajax_favorites
+    render :string => 'ok'
   end    
 
   ### This is the only page not loaded by ajax; also the view needs better performance
@@ -204,4 +207,11 @@ class QuoteController < Rho::RhoController
     render :action => :ajax_favorites, :layout => false
   end
  
+  ### Return topic name
+  def topic_by_quote_id                      
+    id = strip_braces(@params['id'])
+    quote = Quote.find(:first,:conditions => {:id => id})
+    topic = Topic.find(:first,:conditions => {:id => quote.topic_id})
+    render :string => topic.name 
+  end
 end

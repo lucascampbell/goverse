@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <title>Quotes</title>
+  <title>Quoto</title>
   <link href="/public/css/swipestyle.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="/public/jqmobile/jquery.mobile-1.0.1.min.css">
   <link href="/public/css/iphone.css" type="text/css" rel="stylesheet"/>
@@ -61,34 +61,24 @@
     return carousel.masterPages[carousel.currentMasterPage].firstChild;  
   }
   
-  function setFavText() {
-    var w, mw, mvx;
+  function setFavState() {  
     if (currentQuote().className == 'y') {    
-      $('#favspan').text('Remove from Favorites');
+      $('#heart').css('opacity','1');
       } else {
-      $('#favspan').text('Add to Favorites');
-    }
-    w = $("#wrapper").width();
-    mw = $("#menu").width();
-    mvx = (w / 2) - (mw / 2);
-    $("#menu").css('left', mvx + 'px');
+      $('#heart').css('opacity','0.5');
+    }   
   }  
-  function resetMenu() {
-    var h,w,mw,mh,mvx,mvy;
-    $("#menu").css('webkitTransitionDuration','0ms');
-    h = $("#wrapper").height();
-    w = $("#wrapper").width();
+  
+    function setTopicByQuoteId(QuoteId){
+      $.getJSON('/app/Quote/{'+ QuoteId +'}/topic_by_quote_id') .complete(function(data) {
+        console.log(data.responseText);
+        $('#hud-topic').text(data.responseText);                       
+      });
+    }
     
-    mw = $("#menu").width();
-    mh = $("#menu").height();
-    mvx = (w / 2) - (mw / 2);
-    mvy = (h / 2) + (mh / 2);
-    
-    $("#menu").css('left', mvx + 'px');
-    $("#menu").css('top', h + 'px');
-  }
   function switchQuote(that,id) {
     that.style.background = '#aaaaaa';
+    setTopicByQuoteId(id);
     $.getJSON('/app/Quote/{'+ id +'}/json') .complete(function(data) {
       slides = jQuery.parseJSON(data.responseText);          
       carousel.options.numberOfPages = slides.length;
@@ -103,9 +93,13 @@
           el.className = slides[page].favorite;
           el.id = slides[page].id;  
           }
-    setFavText();
+    setFavState();
       });
-   
+      
+      
+
+  
+  
   $('#thelist').load('/app/Quote/ajax_topics',function(){
                 myScroll.refresh();
                 myScroll.scrollTo(0,0);}); 
@@ -113,6 +107,7 @@
   
   function switchQuoteImage(that,id,image) {
     that.style.background = '#aaaaaa';
+    setTopicByQuoteId(id);
     $.getJSON('/app/Quote/{'+ id +'}/json') .complete(function(data) {
       slides = jQuery.parseJSON(data.responseText);          
       carousel.options.numberOfPages = slides.length;
@@ -128,7 +123,7 @@
           el.className = slides[page].favorite;
           el.id = slides[page].id;  
           }
-  setFavText();
+  setFavState();
       });
    
   $('#thelist').load('/app/Quote/ajax_topics',function(){
@@ -153,7 +148,7 @@
           el.className = slides[page].favorite;
           el.id = slides[page].id;  
           }
-  setFavText();
+  setFavState();
       });
    
   $('#thelist').load('/app/Quote/ajax_topics',function(){
@@ -161,8 +156,10 @@
                 myScroll.scrollTo(0,0);});               
     }
       
-  function switchTopic(that,topicId) {
+  function switchTopic(that,topicId,topicName) {
     that.style.background = '#aaaaaa'; 
+    $('#hud-topic').text(topicName);
+    console.log(topicName);
     $.getJSON('/app/Quote/{'+ topicId +'}/json_by_topic_id') .complete(function(data) {
       slides = jQuery.parseJSON(data.responseText);          
          carousel.options.numberOfPages = slides.length;
@@ -177,7 +174,7 @@
              el.className = slides[page].favorite;
              el.id = slides[page].id;  
              }
-       setFavText();
+       setFavState();
          });
       
      $('#thelist').load('/app/Quote/ajax_topics',function(){
@@ -196,7 +193,7 @@
         <ul id="thelist">
           <% @topics.each do |topic| %>    
             <% quote = Quote.find(:first,:conditions => {:topic_id => topic.id}) %>
-            <li onclick="switchTopic(this,<%= topic.id %>);"><%= topic.name %></li>
+            <li onclick="switchTopic(this,<%= topic.id %>,'<%= topic.name %>');"><%= topic.name %></li>
           <% end %>
         </ul>
       </div>
@@ -206,33 +203,47 @@
   <div id="wrapper"></div>
 
   <div id="menu" style="position: absolute;">  
-    <div data-role="controlgroup" class="ui-corner-all ui-controlgroup ui-controlgroup-vertical">
-      <a href="" id="showfavorites" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-top ui-btn-hover-undefined ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text"  style="font-size: 15px;">Show Favorites</span></span></a>    
-          <a href="" id="addtofavorites" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-top ui-btn-hover-undefined ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" id="favspan" style="font-size: 15px;">Add to Favorites</span></span></a>
-          <a href="" id="shareemail" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Share via Email</span></span></a>
-          <a href="" id="findquote" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Find Quote</span></span></a>          
-          <a href="" id="choosephoto" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Select Photo</span></span></a>
-          <a href="" id="newsubmit" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">my Quotes</span></span></a>                        
-          <a href="" id="backtoquote" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-bottom ui-controlgroup-last ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom ui-controlgroup-last"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Close Menu</span></span></a>
+    <div class="ui-corner-all ui-controlgroup ui-controlgroup-vertical">
+      <a href="" id="showfavorites" class="ui-btn ui-btn-up-c ui-corner-top ui-btn-hover-undefined ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text"  style="font-size: 15px;">Show Favorites</span></span></a>              
+          <a href="" id="shareemail" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Share via Email</span></span></a>
+                    
+          <a href="" id="choosephoto" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Select Photo</span></span></a>
+          <a href="" id="newsubmit" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Feedback</span></span></a>                        
+          <a href="" id="backtoquote" class="ui-btn ui-btn-up-c ui-corner-bottom ui-controlgroup-last ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom ui-controlgroup-last"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Close Menu</span></span></a>
     </div>  
   </div>
   
+  
+  <div id="hud" style="position: absolute;left: 0px;top:0px;width:100%;display:none;">  
+    <div id="hud-header" style="position: absolute; left:0px;top:0px;width:100%;color:white;text-align:center;">
+    <span id="hud-topic" style="font-family: Verdana;font-size: 26px;text-shadow: black 1px 1px 2px;opacity:0.5;"><%= @topic %></span>
+    </div>
+    <div id="hud-footer" style="position: absolute; left:0px;top:200px;width:100%;height:47px;text-align:center;">
+    <img id="heart" src="/public/icons/heart.png" style="width:35px;height:35px;float:left;margin-left:10px;opacity:0.5;">
+    <img id="magnify" src="/public/icons/search.png" style="width:35px;height:35px;opacity:0.5;">
+    <img id="more" src="/public/icons/plus.png" style="width:35px;height:35px;float:right;margin-right:10px;opacity:0.5;">
+  </div>
 <script>
   var h,w,mw,mh,mvx,mvy;
   
   h = $("#wrapper").height();
   w = $("#wrapper").width();
-  
+  $("#hud-footer").css('top', h - 47 + 'px');  
   mw = $("#menu").width();
   mh = $("#menu").height();
   mvx = (w / 2) - (mw / 2);
   mvy = (h / 2) + (mh / 2);
 
-  //place menu correctly on screen
-  resetMenu();
 
-  //This is the touchclick event, opens the menu          
-  $("#wrapper").click(function(e) { 
+
+  $("#wrapper").click(function(e) {
+    e.preventDefault();
+    $('#hud').toggle();
+  }
+  )
+  
+  //Open menu after click on the +          
+  $("#more").click(function(e) { 
     var w,mw, mvx;
     e.preventDefault();
     
@@ -242,6 +253,7 @@
     w = $("#wrapper").width();
     mw = $("#menu").width();
     mvx = (w / 2) - (mw / 2);
+    $("#menu").css('left', mvx + 'px');  
     
     $("#menu").show();
     $("#header").show();
@@ -253,8 +265,7 @@
       myScroll.refresh();
       myScroll.scrollTo(0,0);}); 
     } else {
-      //Run transition animation to show menu    
-      $("#menu").css('left', mvx + 'px');       
+      //Run transition animation to show menu          
       $("#menu").css('webkitTransitionDuration','500ms');
       $("#menu").css('webkitTransform','translate3d(0,-' + mvy + 'px,0)');               
     } 
@@ -268,28 +279,24 @@
     $("#menu").css('webkitTransform','translate3d(0,' + mvy + 'px,0)');
     });       
 
-  $("#addtofavorites").click(function(e) {
-    e.preventDefault();
-    $("#header").hide();
+
+  $("#heart").click(function(e) {
+    e.preventDefault();      
     //If already favorite, unset favorite flag
-    if (carousel.masterPages[carousel.currentMasterPage].firstChild.className == 'y') {          
-      $('#thelist').load('/app/Quote/{' + id() + '}/unset_favorite',function(){
-      myScroll.refresh();
-      myScroll.scrollTo(0,0);
-      $('#quotemenucontainer').show();
-      });                              
-      } else {
-        //Set favorite flag
-        $('#thelist').load('/app/Quote/{' + id() + ',' + image() + '}/set_favorite',function(){
-        myScroll.refresh();
-        myScroll.scrollTo(0,0);
-        $('#quotemenucontainer').show();
-        });       
-        }
-    $("#menu").css('webkitTransitionDuration','500ms');
-    $("#menu").css('webkitTransform','translate3d(0,' + mvy + 'px,0)');
-    _gaq.push(['_trackEvent', 'addtofavorites', id(), image()]);       
-    });  
+    if (carousel.masterPages[carousel.currentMasterPage].firstChild.className == 'y') { 
+      $.getJSON('/app/Quote/{' + id() + '}/unset_favorite') .complete(function(data) {        
+        $("#heart").css('opacity','0.5');
+        carousel.masterPages[carousel.currentMasterPage].firstChild.className = 'n'
+        for (i=0;i<slides.length;i++) {if (slides[i].id == id()) {slides[i].favorite = 'y'}}
+      });
+    }else{   
+      $.getJSON('/app/Quote/{' + id() + ',' + image() + '}/set_favorite') .complete(function(data) {
+        $("#heart").css('opacity','1');   
+        carousel.masterPages[carousel.currentMasterPage].firstChild.className = 'y'  
+        for (i=0;i<slides.length;i++) {if (slides[i].id == id()) {slides[i].favorite = 'y'}}                                
+      });
+    }
+  }); 
      
   $("#showfavorites").click(function(e) {
     e.preventDefault();            
@@ -313,13 +320,18 @@
   $("#newsubmit").click(function(e) {
     e.preventDefault();
     _gaq.push(['_trackEvent', 'newsubmit', id(), image()]);
-    window.location.href = 'mailto:@gmail.com?subject=New Inspiration&body=Please add my photo / quote to Quotes for even more inspiration.';   
+    window.location.href = 'mailto:upwordpush@gmail.com?subject=New Inspiration&body=Please add my photo / quote to Quoto for even more inspiration.';   
   });
     
-  $("#findquote").click(function(e) {
+  $("#magnify").click(function(e) {
     e.preventDefault();   
-    $('#search').val('');                                      
-    $('#quotemenucontainer').show();     
+    $('#thelist').load('/app/Quote/ajax_topics',function(){
+                  myScroll.refresh();
+                  myScroll.scrollTo(0,0);});               
+      
+    $('#search').val('');          
+    $("#header").show();                            
+    $('#quotemenucontainer').toggle();     
     myScroll.refresh();
     $("#menu").hide();
     $("#menu").css('webkitTransitionDuration','0ms');
@@ -371,7 +383,7 @@
       id: '<%= @image %>'   
     },
     <% img = 1 %>     
-    <% while img < 55 %>    
+    <% while img < 59 %>    
     {
       img: '/public/photos/<%= img.to_s %>.jpg',
       width: $('#wrapper').width(),
@@ -379,7 +391,7 @@
       id: '<%= img.to_s %>'
     }
     <% img = img + 1 %>
-    <% if img < 55 %>
+    <% if img < 59 %>
     ,
   <% end %>
   <% end %>
@@ -416,7 +428,7 @@
     carousel.masterPages2[i].appendChild(el); 
       
   }
-  setFavText();
+  setFavState();
   carousel.onFlip(function () {
     var el,
       upcoming,
@@ -433,8 +445,8 @@
       }
     }
         
-    resetMenu();
-    setFavText();  
+
+    setFavState();  
     
     _gaq.push(['_trackEvent', 'share', id(), image()]);
   });
