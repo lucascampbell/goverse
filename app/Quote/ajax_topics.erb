@@ -1,4 +1,3 @@
 <% @topics.each do |topic| %>    
-  <%# quote = Quote.find(:first,:conditions => {:topic_id => topic.id}) %>
-  <li onclick="switchTopic(this,<%= topic.object %>);"><%= topic.name %></li>
+  <li onclick="switchTopic(this,<%= topic.id %>);" style='padding-left:10px'><%= topic.name.capitalize %></li>
 <% end %>

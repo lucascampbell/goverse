@@ -8,6 +8,19 @@ class Topic
 
   #add model specifc code here
   def self.find_active
-    Topic.find(:all,:conditions=>{:active =>'true'},:order=>'name')
+    Topic.find(:all,:conditions=>{:visible =>'1'},:order=>'name')
+  end
+  
+  def self.find_by_id(id)
+    Topic.find(:first,:conditions=>{:id=>id})
+  end
+  
+  def self.find_by_name(t_name)
+    Topic.find(:first,:conditions => {:name => t_name}) 
+  end
+  
+  def self.find_by_quote_id(id)
+    q = QuoteTopic.find(:first,:conditions=>{:quote_id=> id})
+    Topic.find(:first,:conditions=>{:id=>q.topic_id,:visible=>'1'})
   end
 end

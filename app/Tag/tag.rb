@@ -7,4 +7,12 @@ class Tag
   # enable :sync
 
   #add model specifc code here
+  
+  def self.find_by_id(id)
+    Tag.find(:first,:conditions=>{:id=>id})
+  end
+  
+  def self.find_by_name(t_name)
+    Tag.find(:first,:conditions => {:name => t_name}) 
+  end
 end

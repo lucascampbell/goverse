@@ -41,19 +41,19 @@
     var imagesScroll;
     function loaded() {
        myScroll     = new iScroll('quotemenu',{bounce:false, hScroll:false, hScrollbar:false});
- 	   imagesScroll = new iScroll('wrapperimages',{bounce:false, hScroll:false, hScrollbar:false}); 
+ 	   imagesScroll = new iScroll('wrapperimages',{hScroll:false, hScrollbar:false}); 
     }
     
     document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-    
     document.addEventListener('DOMContentLoaded', loaded, false);
   </script>
 
 </head>
 
 <body>
-  <div id="blind">getting inpired..</div>
+  <div id="blind">getting inspired..</div>
   <div id="quotemenucontainer">
+	<div id="header_fav">Favorites</div>
     <div id="header">
 		<form id="searchform"><input type="text" id="search"></form>
 	</div>
@@ -61,8 +61,7 @@
       <div id="quotescroll">
         <ul id="thelist">
           <% @topics.each do |topic| %>    
-            <%# quote = Quote.find(:first,:conditions => {:topic_id => topic.id}) %>
-            <li onclick="switchTopic(this,<%= topic.object %>);"><%= topic.name %></li>
+            <li onclick="switchTopic(this,<%= topic.id %>);" style='padding-left:10px'><%= topic.name.capitalize %></li>
           <% end %>
         </ul>
       </div>
@@ -70,6 +69,18 @@
   </div>
     
   <div id="wrapper"></div>
+
+  <!-- header topic -->
+  <div id='topic_header'><%=@topic_name.capitalize%></div>
+
+   <!-- bottom tabs -->
+   <div id='bottom_nav'>
+	<ul id='bottom_list'>
+		<li id='addtofavorites' class='btm_item' style='opacity:.5'><img src='/public/images/heart.png' alt='Image' height='32' width='37'></li>
+		<li id='findquote' class='btm_item'><img src='/public/images/search.png' alt='Image' height='37' width='37'></li>
+		<li id='swrapper' class='btm_item'><img src='/public/images/plus.png' alt='Image' height='37' width='37'></li>
+	</ul>
+  </div>
 
   <!--div to load images into with iscroll -->
   <div id='wcontainer'>
@@ -79,14 +90,31 @@
     </div>
   </div>
 
+ <!--quote submit form -->
+<div id='quoteformcontainer'>
+	<form id='quoteform'>
+	  <div class='ui-body ui-body-b ui-corner-all' style='margin:0 10%'>
+		<label id='lquote' for="quote" class='ui-input-text'>*Quote:</label>
+		<textarea name="quote" id="quote" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset" ></textarea>
+		<label id='lcitation' for="citation" class='ui-input-text'>*Citation:</label>
+		<input type="text" name="citation" id="citation" value=""  class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset" style='line-height:.4'/>
+		<label id='lbook' for="book" class='ui-input-text'>*Book:</label>
+		<input type="text" name="book" id="book" value="" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset" />
+		<div class='ui-btn ui-btn-up-c ui-shadow ui-btn-corner-all ui-fullsize ui-btn-block'>
+			<span class='ui-btn-inner ui-btn-corner-all'><span class='ui-btn-text'>Submit</span></span>
+			<input type='submit' class='ui-btn-hidden' value='Submit'/>
+		</div>
+	  </div>
+	</form>
+</div>
+
   <div id="menu" style="position: absolute;">  
     <div data-role="controlgroup" class="ui-corner-all ui-controlgroup ui-controlgroup-vertical">
-      <a href="" id="showfavorites" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-top ui-btn-hover-undefined ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text"  style="font-size: 15px;">Show Favorites</span></span></a>    
-          <a href="" id="addtofavorites" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-top ui-btn-hover-undefined ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" id="favspan" style="font-size: 15px;">Add to Favorites</span></span></a>
-          <a href="" id="shareemail" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Share via Email</span></span></a>
-          <a href="" id="findquote" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Find Quote</span></span></a>        
+      <a href="" id="showfavorites" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-top ui-btn-hover-undefined ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text"  style="font-size: 15px;">Show Favorites</span></span></a>
+          <a href="" id="shareemail" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Share via Email</span></span></a>     
           <a href="" id="choosephoto" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Select Photo</span></span></a>
-          <a href="" id="newsubmit" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">My Quotes</span></span></a>                        
+          <a href="" id="newquote" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Submit Quote</span></span></a>
+		<a href="" id="updatedb" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-bottom ui-controlgroup-last ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom ui-controlgroup-last"><span id='updatetext' class="ui-btn-text" style="font-size: 15px;padding: 10px;">Get Updates</span></span></a>
           <a href="" id="backtoquote" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-bottom ui-controlgroup-last ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom ui-controlgroup-last"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Close Menu</span></span></a>
     </div>
   </div>
@@ -103,22 +131,21 @@
     page,
     slides = [
       {
-        text: '<%= strip_ticks(@quote.quote) %><br><span style="text-align:left;font-size: 9px"><%= strip_ticks(@quote.book) %> <%= strip_ticks(@quote.citation) %></span>',
-        favorite: '<%= @quote.favorite %>',
-        id: '<%= @quote.object %>',
+        text: '<%= strip_ticks(@quote.quote) %><br><span style="text-align:left;font-size: 9px"><%= strip_ticks(@quote.author) %> <%= strip_ticks(@quote.book) %> <%= strip_ticks(@quote.citation) %></span>',
+        favorite: '<%= @quote.favorite ? @quote.favorite : "n" %>',
+        id: '<%= @quote.id %>',
       },  
         
       <% @quotes.each do |quote| %>                 
-         { text: '<%= strip_ticks(quote.quote) %><br><span style="text-align:left;font-size: 9px"><%= strip_ticks(quote.book) %> <%= strip_ticks(quote.citation) %></span>',
-        favorite: '<%= quote.favorite %>',
-        <% puts quote.object %>
-         id: '<%= quote.object %>'
+         { text: '<%= strip_ticks(quote.quote) %><br><span style="text-align:left;font-size: 9px"><%= strip_ticks(quote.author) %> <%= strip_ticks(quote.book) %> <%= strip_ticks(quote.citation) %></span>',
+        favorite: '<%= quote.favorite ? quote.favorite : "n" %>',
+         id: '<%= quote.id %>'
       }<% unless @quotes.last == quote %>,<% end %>
         <% end %>    
     ],
   photos = [
     {
-      img: '/public/photos/<%= @image %>.jpg',
+      img: '<%=Live.image_link(@image)%>',
       width: $('#wrapper').width(),
       height: $('#wrapper').height(), 
       id: '<%= @image %>'   
@@ -126,7 +153,7 @@
     <% img = 1 %>     
     <% while img < Live.live.image_count.to_i %>    
     {
-      img: '/public/photos/<%= img.to_s %>.jpg',
+      img: '<%=Live.image_link(img)%>',
       width: $('#wrapper').width(),
       height: $('#wrapper').height(), 
       id: '<%= img.to_s %>'
@@ -183,11 +210,10 @@
         el.className = slides[upcoming].favorite;
       }
     }
-        
     resetMenu();
     setFavText();  
     
-    _gaq.push(['_trackEvent', 'share', id(), image()]);
+    _gaq.push(['_trackPageview', 'swipequote/' + id()]); 
   });
   carousel.onFlipY(function () {
     var el,
@@ -206,7 +232,7 @@
         el.id = photos[upcoming].id;                     
       }
     }     
-    _gaq.push(['_trackEvent', 'share', id(), image()]);
+    _gaq.push(['_trackPageview', 'swipequote/' + image()]); 
   });
   
   carousel.onMoveOut(function () {
