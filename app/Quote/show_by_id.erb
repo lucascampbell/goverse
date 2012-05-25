@@ -1,3 +1,44 @@
+<!-- Copyright (c) 2012 The First Church of Christ, Scientist.
+
+   GNUv2.0:
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License along
+   with this program; if not, write to the Free Software Foundation, Inc.,
+   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+   Further inquiries can be directed towards app@goverse.org
+
+   MIT:
+
+   Permission is hereby granted, free of charge, to any person obtaining a
+   copy of this software and associated documentation files (the "Software"),
+   to deal in the Software without restriction, including without limitation
+   the rights to use, copy, modify, merge, publish, distribute, sublicense,
+   and/or sell copies of the Software, and to permit persons to whom the
+   Software is furnished to do so, subject to the following conditions:
+
+   The above copyright notice and this permission notice shall be included
+   in all copies or substantial portions of the Software.
+
+       THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+       OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+       MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+       IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+       CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+       TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+       OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. -->
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,7 +82,7 @@
     var imagesScroll;
     function loaded() {
        myScroll     = new iScroll('quotemenu',{bounce:false, hScroll:false, hScrollbar:false});
- 	   imagesScroll = new iScroll('wrapperimages',{hScroll:false, hScrollbar:false}); 
+ 	   imagesScroll = new iScroll('wrapperimages',{bounce:false, hScroll:false, hScrollbar:false}); 
     }
     
     document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
@@ -115,7 +156,6 @@
           <a href="" id="choosephoto" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Select Photo</span></span></a>
           <a href="" id="newquote" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Submit Quote</span></span></a>
 		<a href="" id="updatedb" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-bottom ui-controlgroup-last ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom ui-controlgroup-last"><span id='updatetext' class="ui-btn-text" style="font-size: 15px;padding: 10px;">Get Updates</span></span></a>
-          <a href="" id="backtoquote" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-bottom ui-controlgroup-last ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom ui-controlgroup-last"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Close Menu</span></span></a>
     </div>
   </div>
   
@@ -131,13 +171,13 @@
     page,
     slides = [
       {
-        text: '<%= strip_ticks(@quote.quote) %><br><span style="text-align:left;font-size: 9px"><%= strip_ticks(@quote.author) %> <%= strip_ticks(@quote.book) %> <%= strip_ticks(@quote.citation) %></span>',
+        text: "<%= strip_ticks(@quote.quote) %><br><span style='text-align:left;font-size: 9px'><% if @quote.author%> <%=strip_ticks(@quote.author)%>,<%end%> <%= strip_ticks(@quote.book) %> <%= strip_ticks(@quote.citation) %></span>",
         favorite: '<%= @quote.favorite ? @quote.favorite : "n" %>',
         id: '<%= @quote.id %>',
       },  
         
       <% @quotes.each do |quote| %>                 
-         { text: '<%= strip_ticks(quote.quote) %><br><span style="text-align:left;font-size: 9px"><%= strip_ticks(quote.author) %> <%= strip_ticks(quote.book) %> <%= strip_ticks(quote.citation) %></span>',
+         { text: "<%= strip_ticks(quote.quote) %><br><span style='text-align:left;font-size: 9px'><%if quote.author%> <%=strip_ticks(quote.author)%>,<%end%> <%= strip_ticks(quote.book) %> <%= strip_ticks(quote.citation) %></span>",
         favorite: '<%= quote.favorite ? quote.favorite : "n" %>',
          id: '<%= quote.id %>'
       }<% unless @quotes.last == quote %>,<% end %>

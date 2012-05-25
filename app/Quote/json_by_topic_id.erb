@@ -1,6 +1,6 @@
 [ 
   <% @quotes.each do |quote| %>    
-     { "text": "<%= strip_ticks(quote.quote) %><br><span style='text-align:left;font-size: 9px'><%= strip_ticks(quote.author) %> <%= strip_ticks(quote.book) %> <%= strip_ticks(quote.citation) %></span>",
+     { "text": "<%= strip_ticks(quote.quote) %><br><span style='text-align:left;font-size: 9px'><% if quote.author%> <%=strip_ticks(quote.author)  %>,<%end%> <%= strip_ticks(quote.book) %> <%= strip_ticks(quote.citation) %></span>",
         "favorite": "<%= quote.favorite %>",        
          "id": "<%= quote.id %>",
          "topic": "<%= @topic_name.capitalize %>"

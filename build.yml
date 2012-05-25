@@ -1,7 +1,7 @@
 #sdk: "/Users/lucascampbell-rossen/rhomobile/rhodes"
 sdk: "/Users/lucascampbell-rossen/rhomobile/new_rhodes/rhodes"
 sdkversion: 3.3.2
-name: quotes
+name: goverse
 version: 1.1
 vendor: JS
 build: debug

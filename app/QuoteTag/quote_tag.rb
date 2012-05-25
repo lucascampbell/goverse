@@ -9,6 +9,7 @@ class QuoteTag
   #add model specifc code here
   def self.get_quotes_by_tag(tag_id)
     ids = QuoteTag.find(:all,:conditions => {:tag_id => tag_id}).collect(&:quote_id)
-    Quote.find(:all,:conditions => {{:name => "id", :op => "IN" } => ids })
+    #Quote.find(:all,:conditions => {{:name => "id", :op => "IN" } => ids })
   end
+  
 end

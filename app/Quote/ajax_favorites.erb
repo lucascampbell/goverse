@@ -4,7 +4,7 @@
 	<ul data-role="listview" data-inset="true" data-split-theme="d">
 	<% @quotes.each do |quote| %>
 	    <li onclick="switchQuoteImage(this,<%= quote.id %>,<%= quote.favorite_image %>)">
-	      <img src="/public/photos/<%= quote.favorite_image %>.jpg" width='40px' height='39px'>
+	      <img src="<%=Live.image_link(quote.favorite_image)%>" width='40px' height='39px'>
 	      <span style="position:absolute;left:60px;top:2px;"><%= quote.quote %></span>
 	    </li>
 	<% end %>

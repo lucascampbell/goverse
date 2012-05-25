@@ -13,13 +13,13 @@ class AppApplication < Rho::RhoApplication
     #SyncEngine.set_notification(-1, "/app/Settings/sync_notify", '')
     
     db_version = '2.12' #Increase number to cause database to be reloaded from /fixtures/object_values.txt; MAKE SURE TO SAVE FAVORITES AND OTHER USER DATA
-    #live = Live.find(:first, :conditions => {:controller => 'App', :action => 'Init', :value => db_version})
-    #if live.nil?
+    live = Live.find(:first, :conditions => {:controller => 'App', :action => 'Init', :value => db_version})
+    if live.nil?
        #Rhom::Rhom.database_full_reset
        Rho::RHO.load_all_sources()     
        Rho::RhoUtils.load_offline_data(['object_values'], '../public')  #loads from /fixtures/object_values.txt       
        Live.create(:controller => 'App', :action => 'Init', :value => db_version) #remember current db version in session model       
-    #end
+    end
     Live.live = Live.find('39000000000')
   end
   

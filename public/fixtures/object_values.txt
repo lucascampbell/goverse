@@ -1,5 +1,5 @@
 source_name|attrib|object|value
-Live|image_count|39000000000|20|
+Live|image_count|39000000000|12|
 Live|id_last|39000000000|1665|
 Live|s3|39000000000|0|
 Tag|id|1|1|

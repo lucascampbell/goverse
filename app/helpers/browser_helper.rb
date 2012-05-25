@@ -19,7 +19,8 @@ module BrowserHelper
     if string.nil?
       " "
     else
-      string.gsub("'"," ").gsub('"',' ')
+      string.gsub("\\","\\\\\\\\").gsub("\"","\\\\\"")
+      #string.gsub("'"," ").gsub('"',' ')
     end      
   end
 

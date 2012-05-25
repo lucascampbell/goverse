@@ -1,3 +1,43 @@
+# Copyright (c) 2012 The First Church of Christ, Scientist.
+# 
+#    GNUv2.0:
+# 
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+# 
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+# 
+#    You should have received a copy of the GNU General Public License along
+#    with this program; if not, write to the Free Software Foundation, Inc.,
+#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# 
+#    Further inquiries can be directed towards app@goverse.org
+# 
+#    MIT:
+# 
+#    Permission is hereby granted, free of charge, to any person obtaining a
+#    copy of this software and associated documentation files (the "Software"),
+#    to deal in the Software without restriction, including without limitation
+#    the rights to use, copy, modify, merge, publish, distribute, sublicense,
+#    and/or sell copies of the Software, and to permit persons to whom the
+#    Software is furnished to do so, subject to the following conditions:
+# 
+#    The above copyright notice and this permission notice shall be included
+#    in all copies or substantial portions of the Software.
+# 
+#        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+#        OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+#        MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+#        IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+#        CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+#        TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+#        OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 require 'rho/rhocontroller'
 #require 'rho/rhoutils'
 require 'helpers/browser_helper'
@@ -23,11 +63,17 @@ class QuoteController < Rho::RhoController
     @image = parms[1]
     
     if @image.nil?      
-      @image = (rand(Live.live.image_count.to_i) + 1).to_s
+      @image = (1 + rand(Live.live.image_count.to_i) ).to_s
     end
     if @id.nil?      
-      @id = '1'#(rand(1000) + 1).to_s
+      @id = (1 + rand(1664)).to_s
     end    
+    
+    #store id and image for s3 reset call
+    if Live.live.s3 == '0'
+      Quote.quote_id = @id
+      Quote.image_id = @image
+    end
     
     # Find the specified quote
     @quote = Quote.find(:first,:conditions => {:id => @id})
@@ -56,9 +102,7 @@ class QuoteController < Rho::RhoController
   end
   
   def device_token
-    device = System.get_property('device_name')
-    Live.live.device = device =~ /iPad/ ? 'ipad' : 'phone'
-    Live.live.save
+    System.set_application_icon_badge(0)
     unless Live.live.registered == '1'
       token = System.get_property('device_id')
       puts "token is --- #{token}"
@@ -80,19 +124,20 @@ class QuoteController < Rho::RhoController
       render :action => :ajax_topics, :layout => false
     else
       #search quote tags first
-      tag_name = @params["tag"].strip.downcase
-      tag = Tag.find_by_name(tag_name)     
-      ids = nil
-      @quotes = QuoteTag.get_quotes_by_tag(tag.id) if tag
+      name = @params["tag"].strip.downcase
+      tag = Tag.find_by_name(name)     
+      quote_ids = []
       
-      #get ids from first search and pass to second query so as not to get duplicates  
-      ids = @quotes.collect(&:id) unless @quotes.nil?
+      quote_ids = QuoteTag.get_quotes_by_tag(tag.id) if tag
+      quote_tps = QuoteTopic.find_ids_by_topic_name(name)
       
-      q2 = Quote.find_by_exclusive(@params["tag"],ids) if ids
+      quote_ids +=  quote_tps if quote_tps
+      quote_ids.uniq!
       
-      @quotes = Quote.find_by_string(@params["tag"]) unless ids
-      @quotes += q2 if (q2 and !q2.empty?)
+      q1 = Quote.find_by_ids(quote_ids)
+      q2 = Quote.find_by_exclusive(name,quote_ids)
       
+      @quotes = q1 + q2
       if @quotes
         render :action=>:search_result, :layout => false
       else
@@ -103,8 +148,7 @@ class QuoteController < Rho::RhoController
    
   # Set favorite; setting and unsetting favorite should be decoupled from showing favorites
   def set_favorite
-    parms = strip_braces(@params['id'])
-    puts "params are --- #{parms}"    
+    parms = strip_braces(@params['id'])   
     if parms.nil?
       parms = '0,1'
     end
@@ -132,7 +176,7 @@ class QuoteController < Rho::RhoController
   def get_topic
     id = strip_braces(@params['id'])
     @topic = Topic.find_by_quote_id(id)
-    puts "topic found is -- #{@topic.name}"
+    @quote = Quote.find(:first,:conditions=>{:id=>id})
     render :action => :topic, :layout => false
   end
   
@@ -144,7 +188,6 @@ class QuoteController < Rho::RhoController
     @quote  = Quote.find(:first)  if @quote.nil?
     @quotes = @quote.topic_quotes
     @topic_name = @quote.topic_name
-    puts "quotes found are -- #{@quotes}"
     render :action => :ajax_quote, :layout => false
   end
   
@@ -175,8 +218,8 @@ class QuoteController < Rho::RhoController
   
   def ajax_images
     w = @params['width'].to_i
-    @width   = w > 320 ? 200 : 100
-    @height  = w > 320 ? 300 : 150
+    @width   = w > 480 ? 250 : 100
+    @height  = w > 480 ? 350 : 150
     @padding = (w % @width) / 2
     @breaks  = w/@width.floor
     render :layout => false
@@ -282,7 +325,9 @@ class QuoteController < Rho::RhoController
        Live.live.s3 = '1' 
        Live.live.image_count = 57
        Live.live.save
-       WebView.navigate('/app/Quote/show_by_id')
+       id = "#{Quote.quote_id},#{Quote.image_id}"
+       puts "id is #{id}"
+       WebView.navigate("/app/Quote/show_by_id?id=#{id}")
      else
        WebView.execute_js("toggle_updatedb();")
      end

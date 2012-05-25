@@ -17,8 +17,15 @@ class Live
   end
   
   def self.image_link(img)
+    unless Live.live.device
+      device = System.get_property('device_name')
+      puts "device is #{device}"
+      Live.live.device = device =~ /iPad/ ? 'ipad' : 'phone'
+      Live.live.save
+      puts "live device is #{Live.live.device}"
+    end
     dir = Live.live.device
-    img.to_i > 21 ? "#{PATH}#{dir}/#{img}.jpg" : "/public/#{dir}_photos/#{img}.jpg"
+    img.to_i > 12 ? "#{PATH}#{dir}/#{img}.jpg" : "/public/#{dir}_photos/#{img}.jpg"
   end
   
   def self.register_push(token)
@@ -46,7 +53,7 @@ class Live
     File.delete(filename) if File.exists? filename
     
     Rho::AsyncHttp.download_file(
-       :url => "https://s3.amazonaws.com/tmc_quotes/phone.zip",
+       :url => "https://s3.amazonaws.com/tmc_quotes/#{dir}.zip",
        :headers => {},
        :callback => '/app/Quote/httpdownload_callback',
        :callback_param => "file=#{dir}",

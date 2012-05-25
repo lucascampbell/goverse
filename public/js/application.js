@@ -1,9 +1,49 @@
+// Copyright (c) 2012 The First Church of Christ, Scientist.
+// 
+//    GNUv2.0:
+// 
+//    This program is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+// 
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+// 
+//    You should have received a copy of the GNU General Public License along
+//    with this program; if not, write to the Free Software Foundation, Inc.,
+//    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+// 
+//    Further inquiries can be directed towards app@goverse.org
+// 
+//    MIT:
+// 
+//    Permission is hereby granted, free of charge, to any person obtaining a
+//    copy of this software and associated documentation files (the "Software"),
+//    to deal in the Software without restriction, including without limitation
+//    the rights to use, copy, modify, merge, publish, distribute, sublicense,
+//    and/or sell copies of the Software, and to permit persons to whom the
+//    Software is furnished to do so, subject to the following conditions:
+// 
+//    The above copyright notice and this permission notice shall be included
+//    in all copies or substantial portions of the Software.
+// 
+//        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+//        OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+//        MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+//        IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+//        CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+//        TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+//        OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 //remove blind and setup event handlers for menu
  jQuery(document).ready(function ($) {
    $('#blind').remove();
 
    var h,w,mw,mh,mvx,mvy;
-  
+   var menu_display = false;
    h = $("#wrapper").height();
    w = $("#wrapper").width();
    
@@ -11,7 +51,12 @@
    mh = $("#menu").height();
    mvx = (w / 2) - (mw / 2);
    mvy = (h / 2) + (mh / 2);
-
+   
+   //check for ipad,notebook and adjust font
+   if(w > 420){
+	 $('#wrapper').css('font-size','20px');
+	 $('#topic_header').css('font-size','20px!important');
+   }
    //place menu correctly on screen
    tab_w = w/3 - 42;
    $('.btm_item').css('width',tab_w);
@@ -89,7 +134,6 @@
      w = $("#wrapper").width();
      mw = $("#menu").width();
      mvx = (w / 2) - (mw / 2);
-   
      
    
      //If menu visible and background clicked, close menu and repopulate with topics
@@ -100,27 +144,31 @@
        myScroll.scrollTo(0,0);}); 
      } 
       
-     // else {
-     // 	 	$("#menu").css('webkitTransitionDuration','500ms');
-     // 	    $("#menu").css('webkitTransform','translate3d(0,' + mvy + 'px,0)');
-     //      }
-     //Run transition animation to show menu
-     else{
-   	   $("#menu").show();
-       $("#header").show();
-       $("#menu").css('left', mvx + 'px');
-       $("#menu").css('webkitTransitionDuration','500ms');
-       $("#menu").css('webkitTransform','translate3d(0,-' + mvy + 'px,0)'); 
-    }         
+     if(menu_display == false){
+	   	$("#menu").show();
+	    $("#header").show();
+	    $("#menu").css('left', mvx + 'px');
+	    $("#menu").css('webkitTransitionDuration','500ms');
+	    $("#menu").css('webkitTransform','translate3d(0,-' + mvy + 'px,0)');
+	    menu_display = true;
+	 }
+	 else
+	 {
+	    $("#menu").css('webkitTransitionDuration','500ms');
+		$("#menu").css('webkitTransform','translate3d(0,' + mvy + 'px,0)');
+		menu_display = false;
+     }         
      $("#quoteformcontainer").hide();
    });
 
    $('#wrapper').click(function(e){
 	  if ($('#bottom_nav').is(':visible')){
 		$('#bottom_nav').hide();
+		$('#topic_header').hide();
 	  }
 	  else{
 		$('#bottom_nav').show();
+		$('#topic_header').show();
 	  }
    });
   
@@ -187,7 +235,8 @@
 		}
      });                    
      $("#menu").css('webkitTransitionDuration','500ms');
-     $("#menu").css('webkitTransform','translate3d(0,' + mvy + 'px,0)');      
+     $("#menu").css('webkitTransform','translate3d(0,' + mvy + 'px,0)');
+     menu_display = false;   
    }); 
    
    $("#shareemail").click(function(e) {
@@ -196,8 +245,10 @@
      var quote = currentQuote().innerHTML;
      var topic = 'Inspiration';
      $.get("/app/Quote/get_topic?id="+id(),function(resp){
-	 	topic = resp;
-	    window.location.href = 'mailto:?subject='+topic+'&body='+quote;  
+	    var r = $.parseJSON(resp);
+	 	var topic = r[0]['topic'];
+	    var body  = r[0]['info'];
+	    window.location.href = 'mailto:?subject='+topic+'&body='+encodeURIComponent(body);  
      })
       
    });
@@ -215,10 +266,12 @@
 	     $("#header").show();                              
 	     $('#quotemenucontainer').show();  
 	     myScroll.refresh();
-	     $("#menu").hide();
+	     
 	     $("#menu").css('webkitTransitionDuration','0ms');
 	     $("#menu").css('webkitTransform','translate3d(0,' + mvy + 'px,0)');
+	     menu_display = false;
      }
+     $("#quoteformcontainer").hide();
    });
 
   $("#choosephoto").click(function(e) {
@@ -228,11 +281,11 @@
      var h = $("#wrapper").height();
      //Run transition animation to show images    
      $("#menu").hide();
+     menu_display = false;
      $('#wrapper').css('background-color','black');
      $('#wcontainer').show();
      imagesScroll.refresh();
-	 imagesScroll.scrollTo(0,0);
-     //window.location.href = '/app/Quote/{'+ id() +'}/photos';  
+	 imagesScroll.scrollTo(0,0);  
   });      
    
    $("#searchform").submit(function(e){  
@@ -289,6 +342,7 @@ function swap_image(img){
 	el.id = img;
     $('#wcontainer').hide();
     $("#menu").hide();
+    menu_display = false;
     $("#menu").css('webkitTransitionDuration','0ms');
     $("#menu").css('webkitTransform','translate3d(0,0px,0)');
 	setFavText();
