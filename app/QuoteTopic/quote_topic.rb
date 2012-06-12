@@ -17,4 +17,10 @@ class QuoteTopic
     QuoteTopic.find(:all,:conditions=>{:topic_id => t.id}).collect(&:quote_id) if t
   end
   
+  def self.find_first_active_quote_id
+    t  = Topic.find_random_active
+    qt = QuoteTopic.find(:first,:conditions=>{:topic_id=>t.id})
+    qt.quote_id
+  end
+  
 end

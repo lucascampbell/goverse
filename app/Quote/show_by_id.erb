@@ -1,98 +1,6 @@
-<!-- Copyright (c) 2012 The First Church of Christ, Scientist.
-
-   GNUv2.0:
-
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License along
-   with this program; if not, write to the Free Software Foundation, Inc.,
-   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-   Further inquiries can be directed towards app@goverse.org
-
-   MIT:
-
-   Permission is hereby granted, free of charge, to any person obtaining a
-   copy of this software and associated documentation files (the "Software"),
-   to deal in the Software without restriction, including without limitation
-   the rights to use, copy, modify, merge, publish, distribute, sublicense,
-   and/or sell copies of the Software, and to permit persons to whom the
-   Software is furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be included
-   in all copies or substantial portions of the Software.
-
-       THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-       OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-       MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-       IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-       CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-       TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-       OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. -->
 
 
-<!DOCTYPE html>
-<html>
-<head>
-  <script type="text/javascript" async src="http://www.google-analytics.com/ga.js"></script>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <title>Quotes</title>
-  <link href="/public/css/swipestyle.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/public/jqmobile/jquery.mobile-1.0.1.min.css">
-  <link href="/public/css/iphone.css" type="text/css" rel="stylesheet"/>
-  <link href="/public/css/onscreenmenu.css" rel="stylesheet" type="text/css">
-  <link href="/public/css/application.css" rel="stylesheet" type="text/css">
-  <script src="/public/jquery/jquery-1.6.4.min.js" type="text/javascript"></script>
-  
-  <script type="text/javascript" src="/public/js/swipeviewxy.js"></script>
-  <script src="/public/js/iscroll-lite.js" type="text/javascript"></script>
-  <script type="text/javascript" src="/public/js/application.js"></script>
-
-   <!-- currently this analytics account is my own -->
-	<script type="text/javascript">
-
-	  var _gaq = _gaq || [];
-	  _gaq.push(['_setAccount', 'UA-31232099-1']);
-	  _gaq.push(['_trackPageview']);
-
-	  (function() {
-	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	  })();
-
-	</script>
-
-
-
-  <script type="text/javascript">
-    //On-Screen Menu
-    var myScroll;
-    var imagesScroll;
-    function loaded() {
-       myScroll     = new iScroll('quotemenu',{bounce:false, hScroll:false, hScrollbar:false});
- 	   imagesScroll = new iScroll('wrapperimages',{bounce:false, hScroll:false, hScrollbar:false}); 
-    }
-    
-    document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-    document.addEventListener('DOMContentLoaded', loaded, false);
-  </script>
-
-</head>
-
-<body>
-  <div id="blind">getting inspired..</div>
+  <div id="blind">loading content...</div>
   <div id="quotemenucontainer">
 	<div id="header_fav">Favorites</div>
     <div id="header">
@@ -102,17 +10,19 @@
       <div id="quotescroll">
         <ul id="thelist">
           <% @topics.each do |topic| %>    
-            <li onclick="switchTopic(this,<%= topic.id %>);" style='padding-left:10px'><%= topic.name.capitalize %></li>
+            <li onclick="switchTopic(this,<%= topic.id %>);" style='padding-left:10px'><%= topic.name.titleize %></li>
           <% end %>
         </ul>
       </div>
     </div>
   </div>
-    
+
+  
   <div id="wrapper"></div>
+	  
 
   <!-- header topic -->
-  <div id='topic_header'><%=@topic_name.capitalize%></div>
+  <div id='topic_header'><%=@topic_name.titleize%></div>
 
    <!-- bottom tabs -->
    <div id='bottom_nav'>
@@ -149,141 +59,29 @@
 	</form>
 </div>
 
+<!-- copyright info -->
+<div id='copyrightcontainer'>
+	  <div id='copyrightp'>
+		<p>Visit GoVerse.org for more information about this app, including:</p>
+		<ul style='padding-bottom:20px'>
+			<li><a class='e_link' href='http://www.goverse.org/#about' target='_blank'>Purpose and sponsors of GoVerse</a></li>
+			<li><a class='e_link' href='http://www.goverse.org/app-tos/' target='_blank'>GoVerse Terms of Service</a></li>
+			<li><a class='e_link' href='http://www.goverse.org/#copyright' target='_blank'>Publisher and copyright information for Bible quotes</a></li>
+		</ul>
+	  </div>
+</div>
+
   <div id="menu" style="position: absolute;">  
     <div data-role="controlgroup" class="ui-corner-all ui-controlgroup ui-controlgroup-vertical">
       <a href="" id="showfavorites" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-top ui-btn-hover-undefined ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text"  style="font-size: 15px;">Show Favorites</span></span></a>
           <a href="" id="shareemail" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Share via Email</span></span></a>     
           <a href="" id="choosephoto" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Select Photo</span></span></a>
           <a href="" id="newquote" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Submit Quote</span></span></a>
-		<a href="" id="updatedb" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-bottom ui-controlgroup-last ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom ui-controlgroup-last"><span id='updatetext' class="ui-btn-text" style="font-size: 15px;padding: 10px;">Get Updates</span></span></a>
+		<a href="" id="updatedb" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span id='updatetext' class="ui-btn-text" style="font-size: 15px;padding: 10px;">Get Updates</span></span></a>
+		<a href="" id="copyright" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-bottom ui-controlgroup-last ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom ui-controlgroup-last"><span id='updatetext' class="ui-btn-text" style="font-size: 15px;padding: 10px;">About GoVerse</span></span></a>
     </div>
   </div>
-  
-<script>
- 
-  
-</script>
-  
-<script type="text/javascript">
-  var carousel,
-    el,
-    i,
-    page,
-    slides = [
-      {
-        text: "<%= strip_ticks(@quote.quote) %><br><span style='text-align:left;font-size: 9px'><% if @quote.author%> <%=strip_ticks(@quote.author)%>,<%end%> <%= strip_ticks(@quote.book) %> <%= strip_ticks(@quote.citation) %></span>",
-        favorite: '<%= @quote.favorite ? @quote.favorite : "n" %>',
-        id: '<%= @quote.id %>',
-      },  
-        
-      <% @quotes.each do |quote| %>                 
-         { text: "<%= strip_ticks(quote.quote) %><br><span style='text-align:left;font-size: 9px'><%if quote.author%> <%=strip_ticks(quote.author)%>,<%end%> <%= strip_ticks(quote.book) %> <%= strip_ticks(quote.citation) %></span>",
-        favorite: '<%= quote.favorite ? quote.favorite : "n" %>',
-         id: '<%= quote.id %>'
-      }<% unless @quotes.last == quote %>,<% end %>
-        <% end %>    
-    ],
-  photos = [
-    {
-      img: '<%=Live.image_link(@image)%>',
-      width: $('#wrapper').width(),
-      height: $('#wrapper').height(), 
-      id: '<%= @image %>'   
-    },
-    <% img = 1 %>     
-    <% while img < Live.live.image_count.to_i %>    
-    {
-      img: '<%=Live.image_link(img)%>',
-      width: $('#wrapper').width(),
-      height: $('#wrapper').height(), 
-      id: '<%= img.to_s %>'
-    }
-      <% img += 1 %>
-      <% if img < Live.live.image_count.to_i %>,<% end %>
-    <% end %>
-  
-  ];
-      
-  carousel = new SwipeView('#wrapper', {
-    numberOfPages: slides.length,
-    numberOfPhotos: photos.length,
-    hastyPageFlip: false
-  });
-  
-  // Load initial data
-  for (i=0; i<3; i++) {
-    page = i==0 ? slides.length-1 : i-1;
-    
-    el = document.createElement('span');
-    el.css = "text-align:left;";
-    el.innerHTML = slides[page].text;
-    el.className = slides[page].favorite;
-    el.id = slides[page].id;  
-    carousel.masterPages[i].appendChild(el)
-    
-    page = i==0 ? photos.length-1 : i-1;
-    
-    el = document.createElement('img');      
-    el.className = 'loading';
-    el.src = photos[page].img;
-    el.width = photos[page].width;
-    el.height = photos[page].height;
-    el.id = photos[page].id;
-    el.css = "position: fixed; left: 0px;top:0px;";
-    el.onload = function () { this.className = ''; }
-    carousel.masterPages2[i].appendChild(el); 
-      
-  }
-  setFavText();
-  carousel.onFlip(function () {
-    var el,
-      upcoming,
-      i;
-  
-    for (i=0; i<3; i++) {
-      upcoming = carousel.masterPages[i].dataset.upcomingPageIndex;
-  
-      if (upcoming != carousel.masterPages[i].dataset.pageIndex) {
-        el = carousel.masterPages[i].querySelector('span');
-        el.innerHTML = slides[upcoming].text;
-        el.id = slides[upcoming].id;
-        el.className = slides[upcoming].favorite;
-      }
-    }
-    resetMenu();
-    setFavText();  
-    
-    _gaq.push(['_trackPageview', 'swipequote/' + id()]); 
-  });
-  carousel.onFlipY(function () {
-    var el,
-      upcoming,
-      i;
-  
-    for (i=0; i<3; i++) {
-      upcoming = carousel.masterPages2[i].dataset.upcomingPageIndex;
-  
-      if (upcoming != carousel.masterPages2[i].dataset.pageIndex) { 
-        el = carousel.masterPages2[i].querySelector('img');     
-        el.className = 'loading';
-        el.src = photos[upcoming].img;
-        el.width = $('#wrapper').width();
-        el.height = $('#wrapper').height();
-        el.id = photos[upcoming].id;                     
-      }
-    }     
-    _gaq.push(['_trackPageview', 'swipequote/' + image()]); 
-  });
-  
-  carousel.onMoveOut(function () {
-    carousel.masterPages2[carousel.currentMasterPage2].className = carousel.masterPages2[carousel.currentMasterPage2].className.replace(/(^|\s)swipeview-active(\s|$)/, '');
-  });
-  
-  carousel.onMoveIn(function () {
-    var className = carousel.masterPages2[carousel.currentMasterPage2].className;
-    /(^|\s)swipeview-active(\s|$)/.test(className) || (carousel.masterPages2[carousel.currentMasterPage2].className = !className ? 'swipeview-active' : className + ' swipeview-active');
-  });
-</script>
 
-</body>
-</html>
+<script type="text/javascript">
+	$('#blind').remove();
+</script>

@@ -1,32 +1,47 @@
 #sdk: "/Users/lucascampbell-rossen/rhomobile/rhodes"
 sdk: "/Users/lucascampbell-rossen/rhomobile/new_rhodes/rhodes"
+
 sdkversion: 3.3.2
-name: goverse
+name: GoVerse
 version: 1.1
 vendor: JS
 build: debug
 bbver: 4.6
 applog: rholog.txt
+
 iphone:
   configuration: Debug
   sdk: iphonesimulator5.1
-  provisionprofile: 
+  provisionprofile:
   codesignidentity: iPhone Developer
-  entitlements: 
+  entitlements:
   BundleIdentifier: com.christianscience.quoto
   BundleURLScheme: quotes
+  
+# iphone:
+#   configuration: Release
+#   sdk: iphonesimulator5.1
+#   provisionprofile: 
+#   codesignidentity: "iPhone Distribution"
+#   entitlements: 
+#   BundleIdentifier: com.christianscience.quoto
+#   BundleURLScheme: quotes
+
 wp:
   productid: b47fc940-4571-012f-6616-080027fd4ea2
 symbian:
   uid: 4018615533
+
 android:
-  version: 2.1
+  version: 3.1
+  android_title: 0
   push:
-  	sender: 
-  	notification: always
-extensions:
-  - json
-  - another-extension
+    sender: quotesapp.tmc@gmail.com
+    notifications: always
+    
 capabilities:
   - push
   - vibrate
+extensions:
+  - json
+  - another-extension

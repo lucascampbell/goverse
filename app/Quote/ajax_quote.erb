@@ -1,14 +1,14 @@
 [
       {
-        "text": "<%= strip_ticks(@quote.quote) %><br><span style='text-align:left;font-size: 9px'><% if @quote.author%>  <%=strip_ticks(@quote.author)%>,<%end%> <%= strip_ticks(@quote.book) %> <%= strip_ticks(@quote.citation) %></span>",
+        "text": "<%= strip_ticks(@quote.quote) %><br><span class='q_info' style='text-align:left;font-size: 9px'><% if @quote.author%>  <%=strip_ticks(@quote.author)%>,<%end%> <%= strip_ticks(@quote.book) %> <%= strip_ticks(@quote.citation) %> <%= strip_ticks(@quote.translation) %></span>",
         "favorite": "<%= @quote.favorite ? @quote.favorite : 'n' %>",
         "id": "<%= @quote.id %>",
-		"topic": "<%=@topic_name.capitalize %>",
+		"topic": "<%=@topic_name.titleize %>",
 		"image_url": "<%=@image_url%>"
       },
         
       <% @quotes.each do |quote| %>        
-         { "text": "<%= strip_ticks(quote.quote) %><br><span style='text-align:left;font-size: 9px'><% if quote.author%> <%=strip_ticks(quote.author)%>,<%end%> <%= strip_ticks(quote.book) %> <%= strip_ticks(quote.citation) %> </span>",
+         { "text": "<%= strip_ticks(quote.quote) %><br><span class='q_info' style='text-align:left;font-size: 9px'><% if quote.author%> <%=strip_ticks(quote.author)%>,<%end%> <%= strip_ticks(quote.book) %> <%= strip_ticks(quote.citation) %> <%= strip_ticks(quote.translation) %></span>",
         "favorite": "<%= quote.favorite ? quote.favorite : 'n' %>",        
          "id": "<%= quote.id %>"
       }<% unless @quotes.last == quote %>,<% end %>

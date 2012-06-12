@@ -24,13 +24,16 @@ class Live
       Live.live.save
       puts "live device is #{Live.live.device}"
     end
+    platform = System.get_property('platform')
     dir = Live.live.device
-    img.to_i > 12 ? "#{PATH}#{dir}/#{img}.jpg" : "/public/#{dir}_photos/#{img}.jpg"
+    path = "/public/#{dir}_photos/#{img}.jpg" if platform == "ANDROID"
+    path = img.to_i > 12 ? "#{PATH}#{dir}/#{img}.jpg" : "/public/#{dir}_photos/#{img}.jpg" unless platform == "ANDROID"
+    path
   end
   
   def self.register_push(token)
-    t = normalize_token(token)
     p = System.get_property('platform')
+    t = p == 'APPLE' ? normalize_token(token) : token
     Rho::AsyncHttp.post(
        :url => "#{URL}/register_device",
        :headers => {"AUTHORIZATION" => TOKEN},
@@ -44,7 +47,7 @@ class Live
   end
   
   def s3_downloads
-    load_and_zip if Live.live.s3 == '0'
+    load_and_zip if (Live.live.s3 == '0' and System.get_property('platform') != "ANDROID")
   end
 
   def load_and_zip

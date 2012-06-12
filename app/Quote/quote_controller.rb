@@ -47,8 +47,21 @@ class QuoteController < Rho::RhoController
   include BrowserHelper
   include ApplicationHelper
   
+  def start
+    if Live.live.first_load == '0'
+      @topic_name = 'test'
+      @quote = Quote.find(:first)
+      @quotes = []
+      @topics = []
+      render :action => :start
+    else
+      redirect :action => :show_by_id
+    end
+  end
+  
   # This is the main method which shows the quote and photo screen
   def show_by_id
+    NavBar.remove
     #System.set_application_icon_badge(0) # After a push-notification set a badge number, this will reset it; PUSH Not. and badge-resets should also be called by AJAX to avoid page reloads                 
     parms = strip_braces(@params['id']) 
       
@@ -66,8 +79,8 @@ class QuoteController < Rho::RhoController
       @image = (1 + rand(Live.live.image_count.to_i) ).to_s
     end
     if @id.nil?      
-      @id = (1 + rand(1664)).to_s
-    end    
+      @id = QuoteTopic.find_first_active_quote_id
+    end
     
     #store id and image for s3 reset call
     if Live.live.s3 == '0'
@@ -80,7 +93,7 @@ class QuoteController < Rho::RhoController
     
     # Quote ids are allowed to seized to exist, this will assure a quote is select; optional: inform user     
     if @quote.nil?
-      @quote = Quote.find(:first)#Quote.find(:first,:conditions => {:id => rand(1000)})
+      @quote = Quote.find(:first)#Quote.find(:first,:conditions => {:id => rand(1000)})3
     end
   
     # Select quotes in the same topic to fill the carousel; optional: randomize, prioritize and limit the order and amount of quotes
@@ -90,25 +103,27 @@ class QuoteController < Rho::RhoController
     
     # Select available topics for the menu; optional: Filter sensitive topics
     @topics = Topic.find_active  
-    render :action => :show_by_id, :layout => false
+    render :action => :show_by_id
   end 
   
   ### This is the Push-Notification callback method  
   def push_callback
-    q = @params['quote']
-    i = rand(Live.live.image_count.to_i) + 1
-    id = q.to_s + "," + i.to_s
-    WebView.navigate("/app/Quote/show_by_id?id=#{id}")
+      q = @params['quote']
+      i = rand(Live.live.image_count.to_i) + 1
+      id = q.to_s + "," + i.to_s
+      quote = Quote.find(:first,:conditions => {:id => q})
+      Alert.show_popup(quote.quote)
+      WebView.execute_js("switchQuote(#{id});")
+      #WebView.navigate("/app/Quote/show_by_id?id=#{id}")
   end
   
   def device_token
     System.set_application_icon_badge(0)
-    unless Live.live.registered == '1'
-      token = System.get_property('device_id')
-      puts "token is --- #{token}"
-      if token.size > 60
-        Live.register_push(token)
-      end
+    load_images
+    token = System.get_property('device_id')
+    puts "token is --- #{token}"
+    if token.size > 60
+      Live.register_push(token)
     end
   end
   
@@ -278,7 +293,7 @@ class QuoteController < Rho::RhoController
     id = params['id']
     if q == 'noupdates'
       Alert.show_popup( {
-          :message => 'There were not any new quotes available. Now checking images...', 
+          :message => 'There were not any new quotes available. Now checking images... This may take 2 minutes.', 
           :title => 'Update complete', 
           :icon => '/public/images/icon.png',
           :buttons => ["Ok"]
@@ -337,5 +352,14 @@ class QuoteController < Rho::RhoController
     params = @params['body']
     puts "callback hit params #{params}"
     Live.live.registered = '1' if params['text'] == 'success'
+  end
+  
+  def add_nav
+    if System.get_property('platform') == "APPLE"
+      NavBar.create :title => "GoVerse",
+                    :left => {
+                      :action => url_for(:controller=> 'Quote', :action => 'show_by_id'),
+                      :label => "home"}
+    end
   end
 end

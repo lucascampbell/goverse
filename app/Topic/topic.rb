@@ -11,6 +11,11 @@ class Topic
     Topic.find(:all,:conditions=>{:visible =>'1'},:order=>'name')
   end
   
+  def self.find_random_active
+    r = rand(54)
+    Topic.find_active[r]
+  end
+  
   def self.find_by_id(id)
     Topic.find(:first,:conditions=>{:id=>id})
   end

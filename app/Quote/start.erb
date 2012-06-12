@@ -1,0 +1,100 @@
+<script type="text/javascript">
+    //var body = document.body
+    //var w = body.offsetWidth;
+    //var h = Math.max( body.scrollHeight, body.offsetHeight, 
+       //                html.clientHeight, html.scrollHeight, html.offsetHeight );
+    //var mimg = document.getElementById('image-bg');
+    //mimg.height = h;
+    //mimg.width = w;
+	var t;
+	t = setTimeout("reloadPage()",5000);
+	function reloadPage(){
+	    window.location.href = '/app/Quote/{' + carousel.masterPages[carousel.currentMasterPage].firstChild.id + ',' + carousel.masterPages2[carousel.currentMasterPage2].firstChild.id + '}/show_by_id'
+	}
+</script>
+
+
+  <div id="blind">
+	<img id='image-bg' src='/public/images/loading1.png' alt='Image'/>
+  </div>
+  <div id="quotemenucontainer">
+	<div id="header_fav">Favorites</div>
+    <div id="header">
+		<form id="searchform"><input type="text" id="search"></form>
+	</div>
+    <div id="quotemenu">
+      <div id="quotescroll">
+        <ul id="thelist">
+          <% @topics.each do |topic| %>    
+            <li onclick="switchTopic(this,<%= topic.id %>);" style='padding-left:10px'><%= topic.name.titleize %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="wrapper"></div>
+	  
+
+  <!-- header topic -->
+  <div id='topic_header'><%=@topic_name.titleize%></div>
+
+   <!-- bottom tabs -->
+   <div id='bottom_nav'>
+	<ul id='bottom_list'>
+		<li id='addtofavorites' class='btm_item' style='opacity:.5'><img src='/public/images/heart.png' alt='Image' height='32' width='37'></li>
+		<li id='findquote' class='btm_item'><img src='/public/images/search.png' alt='Image' height='37' width='37'></li>
+		<li id='swrapper' class='btm_item'><img src='/public/images/plus.png' alt='Image' height='37' width='37'></li>
+	</ul>
+  </div>
+
+  <!--div to load images into with iscroll -->
+  <div id='wcontainer'>
+    <div id="wrapperimages">
+      <div id="wscroll">
+      </div>
+    </div>
+  </div>
+
+ <!--quote submit form -->
+<div id='quoteformcontainer'>
+	<form id='quoteform'>
+	  <div class='ui-body ui-body-b ui-corner-all' style='margin:0 10%'>
+		<label id='lquote' for="quote" class='ui-input-text'>*Quote:</label>
+		<textarea name="quote" id="quote" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset" ></textarea>
+		<label id='lcitation' for="citation" class='ui-input-text'>*Citation:</label>
+		<input type="text" name="citation" id="citation" value=""  class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset" style='line-height:.4'/>
+		<label id='lbook' for="book" class='ui-input-text'>*Book:</label>
+		<input type="text" name="book" id="book" value="" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset" />
+		<div class='ui-btn ui-btn-up-c ui-shadow ui-btn-corner-all ui-fullsize ui-btn-block'>
+			<span class='ui-btn-inner ui-btn-corner-all'><span class='ui-btn-text'>Submit</span></span>
+			<input type='submit' class='ui-btn-hidden' value='Submit'/>
+		</div>
+	  </div>
+	</form>
+</div>
+
+<!-- copyright info -->
+<div id='copyrightcontainer'>
+	  <div id='copyrightp'>
+		<p>Visit GoVerse.org for more information about this app, including:</p>
+		<ul style='padding-bottom:20px'>
+			<li><a href='http://www.goverse.org/#about' target='_blank'>Purpose and sponsors of GoVerse</a></li>
+			<li><a href='http://www.goverse.org/app-tos/' target='_blank'>GoVerse Terms of Service</a></li>
+			<li><a href='http://www.goverse.org/#copyright' target='_blank'>Publisher and copyright information for Bible quotes</a></li>
+		</ul>
+	  </div>
+</div>
+
+  <div id="menu" style="position: absolute;">  
+    <div data-role="controlgroup" class="ui-corner-all ui-controlgroup ui-controlgroup-vertical">
+      <a href="" id="showfavorites" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-top ui-btn-hover-undefined ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text"  style="font-size: 15px;">Show Favorites</span></span></a>
+          <a href="" id="shareemail" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Share via Email</span></span></a>     
+          <a href="" id="choosephoto" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Select Photo</span></span></a>
+          <a href="" id="newquote" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span class="ui-btn-text" style="font-size: 15px;padding: 10px;">Submit Quote</span></span></a>
+		<a href="" id="updatedb" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom"><span id='updatetext' class="ui-btn-text" style="font-size: 15px;padding: 10px;">Get Updates</span></span></a>
+		<a href="" id="copyright" data-role="button" data-corners="true" data-shadow="true" data-iconshadow="true" data-inline="false" data-wrapperels="span" class="ui-btn ui-btn-up-c ui-corner-bottom ui-controlgroup-last ui-btn-up-undefined"><span class="ui-btn-inner ui-corner-top ui-corner-bottom ui-controlgroup-last"><span id='updatetext' class="ui-btn-text" style="font-size: 15px;padding: 10px;">About GoVerse</span></span></a>
+    </div>
+  </div>
+

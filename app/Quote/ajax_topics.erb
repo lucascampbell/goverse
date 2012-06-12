@@ -1,3 +1,3 @@
 <% @topics.each do |topic| %>    
-  <li onclick="switchTopic(this,<%= topic.id %>);" style='padding-left:10px'><%= topic.name.capitalize %></li>
+  <li onclick="switchTopic(this,<%= topic.id %>);" style='padding-left:10px'><%= topic.name.titleize %></li>
 <% end %>

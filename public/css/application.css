@@ -40,9 +40,49 @@
   background:#ccc;
 }
 
+#copyrightcontainer {
+  display:none;
+  position:absolute;
+   z-index:2;
+  top:55px; 
+  bottom:48px;
+  left:0px;
+  width:100%; 
+  overflow:auto;
+  
+}
+
+#copyrightp {
+	font-size:12px;
+	text-align:left;
+	margin:0 10% 10px 10%;
+	background-color:#fafafa;
+	border-top-left-radius: 7px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 8px;
+}
+
+#copyrightp ul{
+	list-style-type:square;
+}
+
+#copyrightp ul li{
+	text-align:left;
+	padding:5px;
+}
+
+#copyrightp a{
+	text-decoration:underline;
+}
+
+#copyrightp p{
+  padding:20px 0 0 20px;
+}
+
 #quoteformcontainer {
   display:none;
-  position:absolute; z-index:1;
+  position:absolute; z-index:2;
   top:45px; bottom:48px;
   left:0px;width:100%; 
   overflow:auto;
