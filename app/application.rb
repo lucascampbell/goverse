@@ -6,20 +6,18 @@ class AppApplication < Rho::RhoApplication
     @tabs = nil
     #To remove default toolbar uncomment next line:
     @@toolbar = nil
-    super    
+    super
     # Uncomment to set sync notification callback to /app/Settings/sync_notify.
     # SyncEngine::set_objectnotify_url("/app/Settings/sync_notify")    
     System.set_push_notification("/app/Quote/push_callback", "")
     SyncEngine.set_notification(-1, "/app/Settings/sync_notify", '')
     
-    db_version = '2.12' #Increase number to cause database to be reloaded from /fixtures/object_values.txt; MAKE SURE TO SAVE FAVORITES AND OTHER USER DATA
+    db_version = '2.13' #Increase number to cause database to be reloaded from /fixtures/object_values.txt; MAKE SURE TO SAVE FAVORITES AND OTHER USER DATA
     live = Live.find(:first, :conditions => {:controller => 'App', :action => 'Init', :value => db_version})
     if live.nil?
        #Rhom::Rhom.database_full_reset
        Rho::RHO.load_all_sources()     
-       Rho::RhoUtils.load_offline_data(['object_values'], '../public')  #loads from /fixtures/object_values.txt 
-       #first time downloads now on 2.13
-       db_version = '2.13'      
+       Rho::RhoUtils.load_offline_data(['object_values'], '../public')  #loads from /fixtures/object_values.txt  
        Live.create(:controller => 'App', :action => 'Init', :value => db_version) #remember current db version in session model       
     end
     Live.live = Live.find('39000000000')
@@ -28,14 +26,6 @@ class AppApplication < Rho::RhoApplication
       Live.live.first_load = '0'
     else
       Live.live.first_load = '1'
-    end
-    
-    #set s3 to zero for image fix to download from server again
-    if live && live.value == '2.12'
-      Live.live.s3 = '0'
-      Live.live.save
-      live.value = '2.13'
-      live.save
     end
       
   end

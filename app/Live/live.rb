@@ -51,9 +51,17 @@ class Live
   end
 
   def load_and_zip
+    #only do pull request if its been 3 minutes since first and still no s3 images found
+    if Live.live.start_timer
+      puts "timer is #{Live.live.start_timer}"
+      puts "diff in timer is #{Time.now - Live.live.start_timer}"
+      return if Time.now - Live.live.start_timer < 180
+    end
     dir = Live.live.device
     filename = File.join(Rho::RhoApplication::get_base_app_path(),dir + '.zip')
+    #filename2 = File.join(Rho::RhoApplication::get_base_app_path(),dir)
     File.delete(filename) if File.exists? filename
+    #File.delete(filename2) if File.exists? filename2
     
     Rho::AsyncHttp.download_file(
        :url => "https://s3.amazonaws.com/tmc_quotes/#{dir}.zip",
@@ -62,5 +70,7 @@ class Live
        :callback_param => "file=#{dir}",
        :filename => filename
        )
+    #if first time or time > 180 set timer
+    Live.live.start_timer = Time.now
   end
 end

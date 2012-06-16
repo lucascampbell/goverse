@@ -12,7 +12,7 @@ class Topic
   end
   
   def self.find_random_active
-    r = rand(54)
+    r = rand(25)
     Topic.find_active[r]
   end
   

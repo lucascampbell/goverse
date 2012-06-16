@@ -7,20 +7,23 @@ class SettingsController < Rho::RhoController
   include BrowserHelper
   
   def index
-    @msg = @params['msg']
-    render
+    redirect :controller=>:quote, :action => :show_by_id
+    #@msg = @params['msg']
+    #render
   end
 
   
   def reset
-    render :action => :reset
+    redirect :controller=>:quote, :action => :show_by_id
+    #render :action => :reset
   end
   
   def do_reset
-    Rhom::Rhom.database_full_reset
-    SyncEngine.dosync
-    @msg = "Database has been reset."
-    redirect :action => :index, :query => {:msg => @msg}
+    
+    #Rhom::Rhom.database_full_reset
+    #SyncEngine.dosync
+    #@msg = "Database has been reset."
+    redirect :controller=>:quote, :action => :show_by_id
   end
  
 end

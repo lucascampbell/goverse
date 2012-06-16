@@ -3,7 +3,7 @@ sdk: "/Users/lucascampbell-rossen/rhomobile/new_rhodes/rhodes"
 
 sdkversion: 3.3.2
 name: GoVerse
-version: 1.1
+version: 1.2.0
 vendor: JS
 build: debug
 bbver: 4.6
@@ -33,7 +33,7 @@ symbian:
   uid: 4018615533
 
 android:
-  version: 3.1
+  version: 3.2.0
   android_title: 0
   push:
     sender: quotesapp.tmc@gmail.com
