@@ -26,6 +26,8 @@ class Topic
   
   def self.find_by_quote_id(id)
     q = QuoteTopic.find(:first,:conditions=>{:quote_id=> id})
-    Topic.find(:first,:conditions=>{:id=>q.topic_id,:visible=>'1'})
+    t = Topic.find(:first,:conditions=>{:id=>q.topic_id,:visible=>'1'})
+    t = Topic.find(:first,:conditions=>{:id=>q.topic_id}) unless t
+    t
   end
 end

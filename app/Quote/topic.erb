@@ -1,6 +1,6 @@
 [
 	{
 		"topic": "<%=@topic.name%>",
-		"info": "<%=@quote.quote%>\n\n<%if @quote.author%><% strip_ticks(@quote.author)%>,<%end%> <%=@quote.book%> <%=@quote.citation%> <%=@quote.translation%>\n\n More inspiration at http://goverse.org"
+		"info": "<%=@quote.quote%>\n\n<%if @quote.author && @quote.author.size > 2%><% strip_ticks(@quote.author)%>,<%end%> <%=@quote.book%> <%=@quote.citation%> <%=@quote.translation%>\n\n More inspiration at http://goverse.org"
 	}
 ]

@@ -1,10 +1,17 @@
-
-
   <div id="blind">loading content...</div>
   <div id="quotemenucontainer">
 	<div id="header_fav">Favorites</div>
     <div id="header">
-		<form id="searchform"><input type="text" id="search"></form>
+		<form id="searchform">
+			<input type="search" id="search" value='' /><br>
+			<table width='100%' style='margin-top:-10px'>
+				<tr>
+					<td align='left' style='padding-left:10px'><input type="radio" name="group1" value="topic" checked>Topic</td>
+					<td align='center'><input type="radio" name="group1" value="tag">Tag</td>
+					<td align='right' style='padding-right:10px'><input type="radio" name="group1" value="keyword">Keyword</td>
+				</tr>
+			</table>
+		</form>
 	</div>
     <div id="quotemenu">
       <div id="quotescroll">
@@ -20,9 +27,13 @@
   
   <div id="wrapper"></div>
 	  
-
   <!-- header topic -->
   <div id='topic_header'><%=@topic_name.titleize%></div>
+
+  <!-- if app crashes show button to reload 
+  <div id='restart_button'>
+	<a href='#' id='restart_app'>Load Quote</a>
+  </div> -->
 
    <!-- bottom tabs -->
    <div id='bottom_nav'>
@@ -47,9 +58,9 @@
 	  <div class='ui-body ui-body-b ui-corner-all' style='margin:0 10%'>
 		<label id='lquote' for="quote" class='ui-input-text'>*Quote:</label>
 		<textarea name="quote" id="quote" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset" ></textarea>
-		<label id='lcitation' for="citation" class='ui-input-text'>*Citation:</label>
+		<label id='lcitation' for="citation" class='ui-input-text'>*Source:</label>
 		<input type="text" name="citation" id="citation" value=""  class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset" style='line-height:.4'/>
-		<label id='lbook' for="book" class='ui-input-text'>*Book:</label>
+		<label id='lbook' for="book" class='ui-input-text'>*Topic:</label>
 		<input type="text" name="book" id="book" value="" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset" />
 		<div class='ui-btn ui-btn-up-c ui-shadow ui-btn-corner-all ui-fullsize ui-btn-block'>
 			<span class='ui-btn-inner ui-btn-corner-all'><span class='ui-btn-text'>Submit</span></span>
@@ -61,14 +72,14 @@
 
 <!-- copyright info -->
 <div id='copyrightcontainer'>
-	  <div id='copyrightp'>
-		<p>Visit GoVerse.org for more information about this app, including:</p>
-		<ul style='padding-bottom:20px'>
-			<li><a class='e_link' href='http://www.goverse.org/#about' target='_blank'>Purpose and sponsors of GoVerse</a></li>
-			<li><a class='e_link' href='http://www.goverse.org/app-tos/' target='_blank'>GoVerse Terms of Service</a></li>
-			<li><a class='e_link' href='http://www.goverse.org/#copyright' target='_blank'>Publisher and copyright information for Bible quotes</a></li>
-		</ul>
-	  </div>
+  <div id='copyrightp'>
+	<p>Visit GoVerse.org for more information about this app, including:</p>
+	<ul style='padding-bottom:20px'>
+		<li><a class='e_link' href='http://www.goverse.org/#about' target='_blank'>Purpose and sponsors of GoVerse</a></li>
+		<li><a class='e_link' href='http://www.goverse.org/app-tos/' target='_blank'>GoVerse Terms of Service</a></li>
+		<li><a class='e_link' href='http://www.goverse.org/#copyright' target='_blank'>Publisher and copyright information for Bible quotes</a></li>
+	</ul>
+  </div>
 </div>
 
   <div id="menu" style="position: absolute;">  

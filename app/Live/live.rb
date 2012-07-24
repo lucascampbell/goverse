@@ -7,7 +7,7 @@ class Live
   TOKEN = "&3!kZ1Ct:zh7GaM"
   URL   = "http://quotoservice.herokuapp.com/api/v1"
   #URL = "http://192.168.1.121:3000/api/v1"
-   #testing http://quoteservice.herokuapp.com/api/v1
+   #testing http://quoteservicetest.herokuapp.com/api/v1
   # Uncomment the following line to enable sync with Live.
   # enable :sync
 
@@ -32,8 +32,9 @@ class Live
   end
   
   def self.register_push(token)
-    p = System.get_property('platform')
-    t = p == 'APPLE' ? normalize_token(token) : token
+    p  = System.get_property('platform')
+    t  = p == 'APPLE' ? normalize_token(token) : token
+    
     Rho::AsyncHttp.post(
        :url => "#{URL}/register_device",
        :headers => {"AUTHORIZATION" => TOKEN},

@@ -7,6 +7,20 @@
 	width:100%;
 }
 
+#restart_button{
+	z-index:-1;
+	text-align:center;
+	position:absolute;
+	top:40%;
+}
+
+#restart_button a {
+	color: white;
+	text-shadow: black 0.1em 0.1em 0.2em;
+	font-size:18px;
+	text-decoration:underline;
+}
+
 #wrapperimages {
    	position:absolute; z-index:1;
 	top:10px; bottom:10px;

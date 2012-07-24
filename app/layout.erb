@@ -100,13 +100,13 @@
 	    page,
 	    slides = [
 	      {
-	        text: "<%= strip_ticks(@quote.quote) %><br><span class='q_info' style='text-align:left;font-size: 9px'><% if @quote.author%> <%=strip_ticks(@quote.author)%>,<%end%> <%= strip_ticks(@quote.book) %> <%= strip_ticks(@quote.citation) %> <%= strip_ticks(@quote.translation) %></span>",
+	        text: "<%= strip_ticks(@quote.quote) %><br><span class='q_info' style='text-align:left;font-size: 9px'><% if @quote.author && @quote.author.size > 2%> <%=strip_ticks(@quote.author)%>,<%end%> <%= strip_ticks(@quote.book) %> <%= strip_ticks(@quote.citation) %> <%= strip_ticks(@quote.translation) %></span>",
 	        favorite: '<%= @quote.favorite ? @quote.favorite : "n" %>',
 	        id: '<%= @quote.id %>',
 	      },  
 
 	      <% @quotes.each do |quote| %>                 
-	         { text: "<%= strip_ticks(quote.quote) %><br><span class='q_info' style='text-align:left;font-size: 9px'><%if quote.author%> <%=strip_ticks(quote.author)%>,<%end%> <%= strip_ticks(quote.book) %> <%= strip_ticks(quote.citation) %> <%= strip_ticks(quote.translation) %></span>",
+	         { text: "<%= strip_ticks(quote.quote) %><br><span class='q_info' style='text-align:left;font-size: 9px'><%if quote.author && quote.author.size > 2%> <%=strip_ticks(quote.author)%>,<%end%> <%= strip_ticks(quote.book) %> <%= strip_ticks(quote.citation) %> <%= strip_ticks(quote.translation) %></span>",
 	        favorite: '<%= quote.favorite ? quote.favorite : "n" %>',
 	         id: '<%= quote.id %>'
 	      }<% unless @quotes.last == quote %>,<% end %>

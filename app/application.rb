@@ -16,11 +16,17 @@ class AppApplication < Rho::RhoApplication
     live = Live.find(:first, :conditions => {:controller => 'App', :action => 'Init', :value => db_version})
     if live.nil?
        #Rhom::Rhom.database_full_reset
-       Rho::RHO.load_all_sources()     
+       Rho::RHO.load_all_sources()
        Rho::RhoUtils.load_offline_data(['object_values'], '../public')  #loads from /fixtures/object_values.txt  
        Live.create(:controller => 'App', :action => 'Init', :value => db_version) #remember current db version in session model       
     end
     Live.live = Live.find('39000000000')
+    
+    Live.live.delete_id = 0 unless Live.live.delete_id
+    puts "d id is #{Live.live.delete_id}"
+    Live.live.update_id = 0 unless Live.live.update_id
+    puts "u id is #{Live.live.update_id}"
+    Live.live.create_id = 0 unless Live.live.create_id
     #hack for android to allow layout to load and cache files initially so swipeview functions properly
     if System.get_property('platform') == "ANDROID"
       Live.live.first_load = '0'

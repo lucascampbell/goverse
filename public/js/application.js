@@ -38,17 +38,19 @@
 //        TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 //        OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //remove blind and setup event handlers for menu
+var myScroll;
+var imagesScroll;
+var h,w,mw,mh,mvx,mvy;
+var menu_display = false;
+var search_term = '';
+
 $(document).ready(function($) {
     document.addEventListener('touchmove',
     function(e) {
         e.preventDefault();
     },
     false)
-
-    var myScroll;
-    var imagesScroll;
-
-
+    
     myScroll = new iScroll('quotemenu', {
         bounce: false,
         hScroll: false,
@@ -60,13 +62,7 @@ $(document).ready(function($) {
         hScrollbar: false
     });
 
-    var h,
-    w,
-    mw,
-    mh,
-    mvx,
-    mvy;
-    var menu_display = false;
+    
     h = $("#wrapper").height();
     w = $("#wrapper").width();
 
@@ -74,6 +70,11 @@ $(document).ready(function($) {
     mh = $("#menu").height();
     mvx = (w / 2) - (mw / 2);
     mvy = (h / 2) + (mh / 2);
+    
+    // restart button if app crashes
+    //rsw = $('#restart_button').width();
+    //rvx = (w / 2) - (rsw / 2)
+    //$('#restart_button').css('left', rvx + 'px');
 
     //check for ipad,notebook and adjust font
     if (w > 420) {
@@ -106,9 +107,11 @@ $(document).ready(function($) {
 
     $("#newquote").click(function(e) {
         e.preventDefault();
+		$("#quotemenu").css("top","82px");
         $('#quoteformcontainer').show();
+		$("#search").val(search_term);
         $("#menu").hide();
-    });
+	 });
 
     $("#updatedb").click(function(e) {
         e.preventDefault();
@@ -244,6 +247,7 @@ $(document).ready(function($) {
         e.preventDefault();
         _gaq.push(['_trackPageview', 'showfavorites']);
         $("#header").hide();
+		$("#quotemenu").css("top","45px");
         $("#header_fav").show();
         $('#thelist').load('/app/Quote/ajax_favorites',
         function(resp) {
@@ -271,7 +275,6 @@ $(document).ready(function($) {
             var body = r[0]['info'];
             window.location.href = 'mailto:?subject=' + topic + '&body=' + encodeURIComponent(body);
         })
-
     });
 
    $(".e_link").click(function(e){
@@ -286,25 +289,40 @@ $(document).ready(function($) {
     });
 
     $("#findquote").click(function(e) {
+		e.preventDefault();
         $.get("/app/Quote/device_token")
-        e.preventDefault();
         if ($('#quotemenucontainer').is(':visible')) {
             backtoquote()
         }
         else {
             _gaq.push(['_trackPageview', 'findquote']);
-            $('#search').val('');
+            //$('#search').val('');
+			$("#quotemenu").css("top","82px");
             $("#header_fav").hide();
             $("#header").show();
             $('#quotemenucontainer').show();
             myScroll.refresh();
-
+			myScroll.scrollTo(0, 0);
+			
             $("#menu").css('webkitTransitionDuration', '0ms');
             $("#menu").css('webkitTransform', 'translate3d(0,' + mvy + 'px,0)');
+			$("#menu").hide();
             menu_display = false;
         }
         $("#quoteformcontainer").hide();
         $("#copyrightcontainer").hide();
+    });
+
+	$("#searchform").submit(function(e) {
+        e.preventDefault();
+        var search_term = $('#search').val();
+		_gaq.push(['_trackPageview', 'searchform/' + search_term]);
+		var name = $('input[name=group1]:checked', '#searchform').val();
+        $('#thelist').load('/app/Quote/search_result', {tag: search_term, stype: name},function() {
+            myScroll.refresh();
+            myScroll.scrollTo(0, 0);
+        });
+        $('#search').blur();
     });
 
     $("#choosephoto").click(function(e) {
@@ -314,6 +332,7 @@ $(document).ready(function($) {
         var h = $("#wrapper").height();
         //Run transition animation to show images
         $("#menu").hide();
+		$('#topic_header').hide();
         menu_display = false;
         $('#wrapper').css('background-color', 'black');
         $('#wcontainer').show();
@@ -321,19 +340,11 @@ $(document).ready(function($) {
         imagesScroll.scrollTo(0, 0);
     });
 
-    $("#searchform").submit(function(e) {
-        e.preventDefault();
-        var term = $('#search').val()
-        _gaq.push(['_trackPageview', 'searchform/' + term]);
-        $('#thelist').load('/app/Quote/search_result', {
-            tag: term
-        },
-        function() {
-            myScroll.refresh();
-            myScroll.scrollTo(0, 0);
-        });
-        $('#search').blur();
-    });
+    $("#restart_app").click(function(e) {
+		e.preventDefault();
+        _gaq.push(['_trackPageview', 'restart_app']);
+		$.get('/app/Quote/restart_app')
+	})
 });
 
 
@@ -372,6 +383,7 @@ function backtoquote() {
 
 function swap_image(img) {
     $('#wrapper').css('background-color', '');
+	$('#topic_header').show();
     el = carousel.masterPages2[carousel.currentMasterPage2].querySelector('img');
     $.get('/app/Live/get_image_link?image=' + img,
     function(resp) {
@@ -426,13 +438,12 @@ function resetMenu() {
 }
 
 function switchQuote(id) {
-    //that.style.background = '#aaaaaa';
     $.getJSON('/app/Quote/{' + id + '}/ajax_quote').complete(function(data) {
         slides = jQuery.parseJSON(data.responseText);
         $("#topic_header")[0].innerHTML = slides[0]['topic'];
         carousel.options.numberOfPages = slides.length;
         $('#quotemenucontainer').hide();
-
+        
         for (i = 0; i < 3; i++) {
             page = i == 0 ? slides.length - 1: 1;
             if (i == carousel.currentMasterPage) {

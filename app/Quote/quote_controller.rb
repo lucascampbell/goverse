@@ -48,6 +48,7 @@ class QuoteController < Rho::RhoController
   include ApplicationHelper
   
   def start
+    @menu = { "Back" => "/app/Quote/show_by_id"}
     if Live.live.first_load == '0'
       @topic_name = 'test'
       @quote = Quote.find(:first)
@@ -57,6 +58,10 @@ class QuoteController < Rho::RhoController
     else
       redirect :action => :show_by_id
     end
+  end
+  
+  def callback_back
+    redirect :action => :show_by_id
   end
   
   # This is the main method which shows the quote and photo screen
@@ -75,8 +80,8 @@ class QuoteController < Rho::RhoController
     @id = parms[0]
     @image = parms[1]
     
-    if @image.nil?      
-      @image = (1 + rand(Live.live.image_count.to_i) ).to_s
+    if @image.nil? 
+      @image = "12"#(1 + rand(10) ).to_s
     end
     if @id.nil?      
       @id = QuoteTopic.find_first_active_quote_id
@@ -102,8 +107,9 @@ class QuoteController < Rho::RhoController
     @topic_name = @quote.topic_name
     
     # Select available topics for the menu; optional: Filter sensitive topics
-    @topics = Topic.find_active  
-    render :action => :show_by_id
+    @topics = Topic.find_active
+   
+    render :action => 'show_by_id'
   end 
   
   ### This is the Push-Notification callback method  
@@ -112,7 +118,11 @@ class QuoteController < Rho::RhoController
       i = rand(Live.live.image_count.to_i) + 1
       id = q.to_s + "," + i.to_s
       quote = Quote.find(:first,:conditions => {:id => q})
-      Alert.show_popup(quote.quote)
+      Alert.show_popup( {
+        :message => quote.quote,
+        :title => "Daily Quote",
+        :buttons => ["Ok"]
+      })
       WebView.execute_js("switchQuote(#{id});")
       #WebView.navigate("/app/Quote/show_by_id?id=#{id}")
   end
@@ -138,22 +148,34 @@ class QuoteController < Rho::RhoController
       @topics = Topic.find_active
       render :action => :ajax_topics, :layout => false
     else
-      #search quote tags first
-      name = @params["tag"].strip.downcase
-      tag = Tag.find_by_name(name)     
-      quote_ids = []
+      #get search type or default to topic
+      stype = @params["stype"] || "topic"
+      @tag = @params["tag"].strip.downcase
+      @quotes = nil
       
-      quote_ids = QuoteTag.get_quotes_by_tag(tag.id) if tag
-      quote_tps = QuoteTopic.find_ids_by_topic_name(name)
+      case stype
+      when "topic"
+          quote_ids = QuoteTopic.find_ids_by_topic_name(@tag)
+          @quotes = Quote.find_by_ids(quote_ids) if quote_ids
+      when "tag"
+          tag = Tag.find_by_name(@tag)
+          if tag
+            @quotes  = QuoteTag.get_quotes_by_tag(tag.id)
+          else
+            @quotes = nil
+          end
+      when "keyword"
+          @quotes = Quote.find_by_string(@tag)
+      else
+          quote_ids = QuoteTopic.find_ids_by_topic_name(@tag)
+          @quotes   = Quote.find_by_ids(quote_ids)
+      end
+     
+      Quote.topic_header = @tag
+      #save quotes so when list clicked search quotes are shown
+      Quote.quotes = @quotes
       
-      quote_ids +=  quote_tps if quote_tps
-      quote_ids.uniq!
-      
-      q1 = Quote.find_by_ids(quote_ids)
-      q2 = Quote.find_by_exclusive(name,quote_ids)
-      
-      @quotes = q1 + q2
-      if @quotes
+      if @quotes and !@quotes.empty?
         render :action=>:search_result, :layout => false
       else
         render :action =>:search_empty, :layout => false
@@ -170,11 +192,11 @@ class QuoteController < Rho::RhoController
     
     parms = parms.split(',')
     id = parms[0]
-    image = parms[1]    
+    image = parms[1] 
         
-    if image.nil?      
+    if image.nil?
       image = '1'
-    end  
+    end
     
     quote = Quote.find(:first,:conditions=>{:id => id})
     quote.update_attributes(:favorite => 'y',:favorite_image => image)
@@ -200,9 +222,13 @@ class QuoteController < Rho::RhoController
     image   = @params['image']
     @image_url = Live.image_link(image) if image
     @quote  = Quote.find(:first,:conditions=>{:id => id})
-    @quote  = Quote.find(:first)  if @quote.nil?
-    @quotes = @quote.topic_quotes
-    @topic_name = @quote.topic_name
+    @quote  = Quote.find(:first) if @quote.nil?
+    @quotes = image ? @quote.topic_quotes : Quote.quotes.select{|q| q.id != id}
+    
+    #add topic quotes if topic only has one quote
+    @quotes = @quote.topic_quotes if @quotes.empty?
+    
+    @topic_name = image ? @quote.topic_name : Quote.topic_header 
     render :action => :ajax_quote, :layout => false
   end
   
@@ -289,8 +315,14 @@ class QuoteController < Rho::RhoController
   def updatedb_callback
     params = @params['body']
     puts "body is -- #{params}"
-    q  = params['q']
-    id = params['id']
+    q   = params['q']
+    id  = params['id']
+    del = params['delete']
+    up  = params['update']
+    puts "up is #{up}"
+    #process updates and deletes
+    Quote.sync_changes(up,del) if up || del
+    
     if q == 'noupdates'
       Alert.show_popup( {
           :message => 'There were not any new quotes available. Now checking images... This may take 2 minutes.', 
@@ -299,7 +331,7 @@ class QuoteController < Rho::RhoController
           :buttons => ["Ok"]
       })
     elsif id
-      Live.live.id_last = id
+      Live.live.create_id = id
       Live.live.save
       Quote.insert_quotes(q)
       Alert.show_popup( {
@@ -361,5 +393,9 @@ class QuoteController < Rho::RhoController
                       :action => url_for(:controller=> 'Quote', :action => 'show_by_id'),
                       :label => "home"}
     end
+  end
+  
+  def restart_app
+    WebView.navigate('/app/Quote/show_by_id')
   end
 end

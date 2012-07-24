@@ -23,4 +23,12 @@ class QuoteTopic
     qt.quote_id
   end
   
+  def self.clear_topics(q_id)
+    qt = QuoteTopic.find(:all,:conditions=>{:quote_id => q_id})
+    qt.each do |q|
+      puts "destroying #{q}"
+      q.destroy
+    end
+  end
+  
 end
