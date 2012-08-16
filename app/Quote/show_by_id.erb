@@ -3,12 +3,13 @@
 	<div id="header_fav">Favorites</div>
     <div id="header">
 		<form id="searchform">
-			<input type="search" id="search" value='' /><br>
+			<input type="search" id="search" value='' />
+			<input type='button' id='formsubmit' value='Search'/><br>
 			<table width='100%' style='margin-top:-10px'>
 				<tr>
-					<td align='left' style='padding-left:10px'><input type="radio" name="group1" value="topic" checked>Topic</td>
-					<td align='center'><input type="radio" name="group1" value="tag">Tag</td>
-					<td align='right' style='padding-right:10px'><input type="radio" name="group1" value="keyword">Keyword</td>
+					<td align='left' style='padding-left:10px'><input id='topicr' type="radio" name="group1" value="topic" checked>Topic</td>
+					<td align='center'><input id='tagr' type="radio" name="group1" value="tag">Tag</td>
+					<td align='right' style='padding-right:10px'><input id='keywordr' type="radio" name="group1" value="keyword">Keyword</td>
 				</tr>
 			</table>
 		</form>
@@ -56,12 +57,13 @@
 <div id='quoteformcontainer'>
 	<form id='quoteform'>
 	  <div class='ui-body ui-body-b ui-corner-all' style='margin:0 10%'>
-		<label id='lquote' for="quote" class='ui-input-text'>*Quote:</label>
-		<textarea name="quote" id="quote" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset" ></textarea>
-		<label id='lcitation' for="citation" class='ui-input-text'>*Source:</label>
-		<input type="text" name="citation" id="citation" value=""  class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset" style='line-height:.4'/>
-		<label id='lbook' for="book" class='ui-input-text'>*Topic:</label>
-		<input type="text" name="book" id="book" value="" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset" />
+		<p style='font-style:italic;font-size:10px;padding:0;color:red'>All fields are required</p>
+		<label id='lquote' for="quote" class='ui-input-text'>Quote:</label><br/>
+		<textarea name="quote" id="quote" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset" ></textarea><br/>
+		<label id='lcitation' for="citation" class='ui-input-text'>Source:</label><br/>
+		<input type="text" name="citation" id="citation" value=""  class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset" style='line-height:.4'/><br/>
+		<label id='lbook' for="book" class='ui-input-text'>Topic:</label><br/>
+		<input type="text" name="book" id="book" value="" class="ui-input-text ui-body-b ui-corner-all ui-shadow-inset" /><br/>
 		<div class='ui-btn ui-btn-up-c ui-shadow ui-btn-corner-all ui-fullsize ui-btn-block'>
 			<span class='ui-btn-inner ui-btn-corner-all'><span class='ui-btn-text'>Submit</span></span>
 			<input type='submit' class='ui-btn-hidden' value='Submit'/>
@@ -74,11 +76,12 @@
 <div id='copyrightcontainer'>
   <div id='copyrightp'>
 	<p>Visit GoVerse.org for more information about this app, including:</p>
-	<ul style='padding-bottom:20px'>
+	<ul style=''>
 		<li><a class='e_link' href='http://www.goverse.org/#about' target='_blank'>Purpose and sponsors of GoVerse</a></li>
 		<li><a class='e_link' href='http://www.goverse.org/app-tos/' target='_blank'>GoVerse Terms of Service</a></li>
 		<li><a class='e_link' href='http://www.goverse.org/#copyright' target='_blank'>Publisher and copyright information for Bible quotes</a></li>
 	</ul>
+	<p style='font-size:10px;padding:0 0 10px 25px'>version 1.6</p>
   </div>
 </div>
 

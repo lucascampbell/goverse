@@ -155,10 +155,11 @@ class Quote
   
   def self.insert_quotes(q)
     q.each do |quote|
-      puts "quote is #{q}"
-      q = Quote.find(:first,:conditions=>{:id => quote['id']})
-      unless q
-        Quote.create({
+      puts "quote is #{quote}"
+      qu = Quote.find(:first,:conditions=>{:id => quote['id']})
+      puts "quote found is #{qu}"
+      unless qu
+        res = Quote.create({
           :quote        => quote['quote'],
           :id           => quote['id'],
           :author       => quote['author'],
@@ -169,12 +170,13 @@ class Quote
           :rating       => quote["rating"],
           :translation  => quote["translation"]
         })
+        puts "result of create quote is #{res}"
         quote["tag_ids"].each do |t_id|
           #add remote logging here to see if tag ids are not found
           # make sure tag exists and we haven't already created row for inner join table
           qt = QuoteTag.find(:first,:conditions=>{:quote_id => quote['id'],:tag_id=>t_id})
           t = Tag.find_by_id(t_id)
-          q = QuoteTag.create({:quote_id=>quote['id'],:tag_id=>t_id}) if t and !qt
+          qtag = QuoteTag.create({:quote_id=>quote['id'],:tag_id=>t_id}) if t and !qt
         end
         quote["topic_ids"].each do |tp_id|
           #add remote logging here to see if tag ids are not found

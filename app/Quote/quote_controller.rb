@@ -121,7 +121,7 @@ class QuoteController < Rho::RhoController
       Alert.show_popup( {
         :message => quote.quote,
         :title => "Daily Quote",
-        :buttons => ["Ok"]
+        :buttons => ["OK"]
       })
       WebView.execute_js("switchQuote(#{id});")
       #WebView.navigate("/app/Quote/show_by_id?id=#{id}")
@@ -212,7 +212,7 @@ class QuoteController < Rho::RhoController
   
   def get_topic
     id = strip_braces(@params['id'])
-    @topic = Topic.find_by_quote_id(id)
+    #@topic = Topic.find_by_quote_id(id)
     @quote = Quote.find(:first,:conditions=>{:id=>id})
     render :action => :topic, :layout => false
   end
@@ -228,6 +228,9 @@ class QuoteController < Rho::RhoController
     #add topic quotes if topic only has one quote
     @quotes = @quote.topic_quotes if @quotes.empty?
     
+    #get font size for citation based on iPad or phone
+    @font_size = Live.live.device == 'ipad' ? "16px" : "9px"
+    
     @topic_name = image ? @quote.topic_name : Quote.topic_header 
     render :action => :ajax_quote, :layout => false
   end
@@ -241,7 +244,7 @@ class QuoteController < Rho::RhoController
     
     @topic_name = Topic.find_by_id(topic_id).name
     @quotes = Quote.find_by_topic(topic_id)               
-    
+    @font_size = Live.live.device == 'ipad' ? "16px" : "9px"
     render :action => :json_by_topic_id, :layout => false
   end
   
@@ -276,34 +279,26 @@ class QuoteController < Rho::RhoController
   def submit_quote_callback
     params = @params['body']
     q  = params['q']
-    t  = params['t']
-    id = params['id']
-    # unless id.nil?
-    #       puts "Live.live.id_last = #{Live.live.id_last}"
-    #       Live.live.id_last = id
-    #       Live.live.save
-    #     end
-    if q == 'noupdates' && id
+    if q == 'noupdates'
       Alert.show_popup( {
           :message => 'Once your quote is reviewed and accepted it will be availble for others to see.', 
           :title => 'Quote submitted successfully', 
           :icon => '/public/images/icon.png',
-          :buttons => ["Ok"]
+          :buttons => ["OK"]
       })
-    elsif q 
-      Quote.insert_quotes(q) unless q == 'noupdates'
+    elsif q == 'Quote already exists'
       Alert.show_popup( {
            :message => 'This quote already exists. It is active or will be active soon.', 
            :title => 'Quote already exists', 
            :icon => '/public/images/icon.png',
-           :buttons => ["Ok"]
+           :buttons => ["OK"]
        })
     else
       Alert.show_popup( {
            :message => 'The quote service is temporarily down, please try again later.', 
            :title => 'Error submitting quote', 
            :icon => '/public/images/icon.png',
-           :buttons => ["Ok"]
+           :buttons => ["OK"]
        })
     end
   end
@@ -325,27 +320,28 @@ class QuoteController < Rho::RhoController
     
     if q == 'noupdates'
       Alert.show_popup( {
-          :message => 'There were not any new quotes available. Now checking images... This may take 2 minutes.', 
-          :title => 'Update complete', 
+          :message => 'There are no new updates at this time', 
+          :title => '', 
           :icon => '/public/images/icon.png',
-          :buttons => ["Ok"]
+          :buttons => ["OK"]
       })
     elsif id
       Live.live.create_id = id
       Live.live.save
       Quote.insert_quotes(q)
+      msg = q.size == 1 ? "You have 1 new quote." : "You have #{q.size} new quotes."
       Alert.show_popup( {
-          :message => "You have #{q.size} new quotes", 
-          :title => 'Quoto updated successfully', 
+          :message => "#{msg} Update complete.", 
+          :title => 'GoVerse updated successfully',
           :icon => '/public/images/icon.png',
-          :buttons => ["Ok"]
+          :buttons => ["OK"]
       })
     else
        Alert.show_popup( {
             :message => 'The quote service is temporarily down, please try again later.', 
             :title => 'Error updating',
             :icon => '/public/images/icon.png',
-            :buttons => ["Ok"]
+            :buttons => ["OK"]
         })
     end
     if Live.live.s3 == '0'
