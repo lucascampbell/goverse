@@ -26,10 +26,10 @@ var SwipeView = (function(){
 				snapThreshold: null,
 				hastyPageFlip: false,
 				loop: true
-			}
+			};
 		
 			// User defined options
-			for (i in options) this.options[i] = options[i];			
+			for (i in options) this.options[i] = options[i];
 			this.wrapper.style.overflow = 'hidden';
 			this.wrapper.style.position = 'relative';
 			
@@ -40,13 +40,13 @@ var SwipeView = (function(){
 			div = document.createElement('div');
 			div.id = 'swipeview-slider2';
 			div.style.cssText = 'z-index:-1;position:absolute;top:0;height:100%;width:100%;-webkit-transition-duration:0;-webkit-transform:translate3d(0,0,0);-webkit-transition-timing-function:ease-out';
-			this.wrapper.appendChild(div);						
+			this.wrapper.appendChild(div);
 			this.slider2 = div;
 			
 			div = document.createElement('div');
 			div.id = 'swipeview-slider';
 			div.style.cssText = 'text-align:left;position:absolute;top:0;height:100%;width:100%;-webkit-transition-duration:0;-webkit-transform:translate3d(0,0,0);-webkit-transition-timing-function:ease-out';
-			this.wrapper.appendChild(div);			
+			this.wrapper.appendChild(div);
 			this.slider = div;
 			
 			this.refreshSize();
@@ -57,11 +57,12 @@ var SwipeView = (function(){
 				div.style.cssText = '-webkit-transform:translateZ(0);position:absolute;top:0;height:100%;width:100%;left:' + i*100 + '%';
 				if (!div.dataset) div.dataset = {};
 				pageIndex = i == -1 ? this.options.numberOfPages - 1 : i;
+				div.dataset.pageIndex = pageIndex;
 				div.dataset.upcomingPageIndex = pageIndex;
 				
 				if (!this.options.loop && i == -1) div.style.visibility = 'hidden';
 
-				this.slider.appendChild(div);				
+				this.slider.appendChild(div);
 				this.masterPages.push(div);
 			}
 			
@@ -76,11 +77,11 @@ var SwipeView = (function(){
 				
 				if (!this.options.loop && i == -1) div.style.visibility = 'hidden';
 
-				this.slider2.appendChild(div);	
+				this.slider2.appendChild(div);
 				this.masterPages2.push(div);
-			}			
+			}
 			
-			className = this.masterPages[1].className;			
+			className = this.masterPages[1].className;
 			this.masterPages[1].className = !className ? 'swipeview-active' : className + ' swipeview-active';
 			className = this.masterPages2[1].className;
 			this.masterPages2[1].className = !className ? 'swipeview-active' : className + ' swipeview-active';
@@ -88,8 +89,8 @@ var SwipeView = (function(){
 			
 			
 			window.addEventListener(resizeEvent, this, false);
-			this.wrapper.addEventListener(startEvent, this, false);			
-			this.wrapper.addEventListener(moveEvent, this, false);			
+			this.wrapper.addEventListener(startEvent, this, false);
+			this.wrapper.addEventListener(moveEvent, this, false);
 			this.wrapper.addEventListener(endEvent, this, false);
 			this.slider.addEventListener('webkitTransitionEnd', this, false);
 			this.slider2.addEventListener('webkitTransitionEnd', this, false);
@@ -161,63 +162,63 @@ var SwipeView = (function(){
 			this.pageHeight = this.wrapperHeight;
 			this.maxX = -this.options.numberOfPages * this.pageWidth + this.wrapperWidth;
 			this.maxY = -this.options.numberOfPhotos * this.pageHeight + this.wrapperHeight;
-			this.snapThreshold = this.options.snapThreshold === null
-				? Math.round(this.pageWidth * .15)
-				: /%/.test(this.options.snapThreshold)
-					? Math.round(this.pageWidth * this.options.snapThreshold.replace('%', '') / 100)
-					: this.options.snapThreshold;
-			this.snapThresholdY = this.options.snapThreshold === null
-				? Math.round(this.pageHeight * .15)
-				: /%/.test(this.options.snapThreshold)
-					? Math.round(this.pageHeight * this.options.snapThreshold.replace('%', '') / 100)
-					: this.options.snapThreshold;					
+			this.snapThreshold = this.options.snapThreshold === null ?
+				Math.round(this.pageWidth * 0.15) :
+				/%/.test(this.options.snapThreshold) ?
+					Math.round(this.pageWidth * this.options.snapThreshold.replace('%', '') / 100) :
+					this.options.snapThreshold;
+			this.snapThresholdY = this.options.snapThreshold === null ?
+				Math.round(this.pageHeight * 0.15) :
+				/%/.test(this.options.snapThreshold) ?
+					Math.round(this.pageHeight * this.options.snapThreshold.replace('%', '') / 100) :
+					this.options.snapThreshold;
 		},
 							
 
-		handleEvent: function (e) {		
+		handleEvent: function (e) {
 			switch (e.type) {
-				case startEvent:					
-					lastStartEvent = e.timeStamp;					
-					this.__start(e);					
+				case startEvent:
+					lastStartEvent = e.timeStamp;
+					this.__start(e);
 					break;
-				case moveEvent:					
+				case moveEvent:
 					this.__move(e);
 					break;
 				case cancelEvent:
-				case endEvent:						
-					//if (e.timeStamp-lastStartEvent < 100) {	
+				case endEvent:
+					//if (e.timeStamp-lastStartEvent < 100) {
 					//	showMenu(e);
-					//	}					
+					//	}
 						this.__end(e);
 						
 					break;
 				case resizeEvent:
-				 	this.__resize();
+					this.__resize();
 					break;
-				case 'webkitTransitionEnd':					
+				case 'webkitTransitionEnd':
 					if (e.target == this.slider && !this.options.hastyPageFlip) this.__flip();
 					if (e.target == this.slider2 && !this.options.hastyPageFlip) this.__flipY();
 					break;
-			}			
+			}
 		},
 
 
 		/**
-		 *
-		 * Pseudo private methods
-		 *
-		 */
+		*
+		* Pseudo private methods
+		*
+		*/
 		__pos: function (x) {
 			this.x = x;
 			this.slider.style.webkitTransform = 'translate3d(' + x + 'px,0,0)';
 		},
 		__posY: function (y) {
 			this.y = y;
-			this.slider2.style.webkitTransform = 'translate3d(0,' + y + 'px,0)';			
+			this.slider2.style.webkitTransform = 'translate3d(0,' + y + 'px,0)';
 		},
 
 		__resize: function () {
-			window.location.href = '/app/Quote/{' + this.masterPages[this.currentMasterPage].firstChild.id + ',' + this.masterPages2[this.currentMasterPage2].firstChild.id + '}/show_by_id'
+			window.location.href = '/app/Quote/{' + this.masterPages[this.currentMasterPage].firstChild.id + ',' + this.masterPages2[this.currentMasterPage2].firstChild.id + '}/show_by_id';
 		//	this.refreshSize();
 		//	this.slider.style.webkitTransitionDuration = '0';
 		//	this.__pos(-this.page * this.pageWidth);
@@ -226,7 +227,7 @@ var SwipeView = (function(){
 		//	carousel.masterPages2[1].firstChild.style.height = $('#wrapper').height() + 'px';
 		//	carousel.masterPages2[1].firstChild.style.width = $('#wrapper').width() + 'px';
 		//	carousel.masterPages2[2].firstChild.style.height = $('#wrapper').height() + 'px';
-		//	carousel.masterPages2[2].firstChild.style.width = $('#wrapper').width() + 'px';	
+		//	carousel.masterPages2[2].firstChild.style.width = $('#wrapper').width() + 'px';
 		//	resetMenu();
 		},
 
@@ -280,7 +281,7 @@ var SwipeView = (function(){
 
 			// We take a 10px buffer to figure out the direction of the swipe
 			if (this.stepsX < 10 && this.stepsY < 10) {
-//				e.preventDefault();				
+//				e.preventDefault();
 				return;
 			}
 		
@@ -296,7 +297,7 @@ var SwipeView = (function(){
 			
 			if (!this.options.loop && (newY > 0 || newY < this.maxY)) {
 				newY = this.y + (deltaY / 2);
-			}			
+			}
 
 			if (!this.thresholdExceeded && dist >= this.snapThreshold) {
 				this.thresholdExceeded = true;
@@ -311,7 +312,7 @@ var SwipeView = (function(){
 			} else if (this.thresholdExceeded && distY < this.snapThresholdY) {
 				this.thresholdExceeded = false;
 				this.__event('movein');
-			}			
+			}
 			
 /*			if (newX > 0 || newX < this.maxX) {
 				newX = this.x + (deltaX / 2);
@@ -328,8 +329,8 @@ var SwipeView = (function(){
 			
 		},
 		
-		__end: function (e) {	
-			if (!this.initiated) return;			
+		__end: function (e) {
+			if (!this.initiated) return;
 			var point = hasTouch ? e.changedTouches[0] : e,
 				dist = Math.abs(point.pageX - this.startX);
 				distY = Math.abs(point.pageY - this.startY);
@@ -348,19 +349,19 @@ var SwipeView = (function(){
 			}
 
 			// Check if we exceeded the snap threshold
-			if (this.direction == 0 && dist < this.snapThreshold) {
+			if (this.direction === 0 && dist < this.snapThreshold) {
 				//this.slider.style.webkitTransitionDuration = '300ms';
 				this.slider.style.webkitTransitionDuration = Math.floor(300 * dist / this.snapThreshold) + 'ms';
-				this.__pos(-this.page * this.pageWidth);				
+				this.__pos(-this.page * this.pageWidth);
 				return;
 			}
 			if (this.direction == 1 && distY < this.snapThresholdY) {
-				this.slider2.style.webkitTransitionDuration = Math.floor(300 * dist / this.snapThreshold) + 'ms';
+				this.slider2.style.webkitTransitionDuration = Math.floor(300 * dist / this.snapThresholdY) + 'ms';
 				//this.slider2.style.webkitTransitionDuration = '300ms';
-				this.__posY(-this.page * this.pageHeight);				
+				this.__posY(-this.page * this.pageHeight);
 				return;
-			}			
-            if (this.direction == 0){
+			}
+            if (this.direction === 0){
 			this.__checkPosition();
             }
             if (this.direction == 1){
@@ -371,58 +372,58 @@ var SwipeView = (function(){
 		__checkPosition: function () {
 			var pageFlip,
 				pageFlipIndex,
-				className;        
+				className;
 				this.masterPages[this.currentMasterPage].className = this.masterPages[this.currentMasterPage].className.replace(/(^|\s)swipeview-active(\s|$)/, '');
 	
-				// Flip the page
-				if (this.directionX > 0) {
-					this.page = -Math.ceil(this.x / this.pageWidth);
-					this.currentMasterPage = (this.page + 1) - Math.floor((this.page + 1) / 3) * 3;
-					this.pageIndex = this.pageIndex == 0 ? this.options.numberOfPages - 1 : this.pageIndex - 1;
-	
-					pageFlip = this.currentMasterPage - 1;
-					pageFlip = pageFlip < 0 ? 2 : pageFlip;
-					this.masterPages[pageFlip].style.left = this.page * 100 - 100 + '%';
-	
-					pageFlipIndex = this.page - 1;
-				} else {
-					this.page = -Math.floor(this.x / this.pageWidth);
-					this.currentMasterPage = (this.page + 1) - Math.floor((this.page + 1) / 3) * 3;
-					this.pageIndex = this.pageIndex == this.options.numberOfPages - 1 ? 0 : this.pageIndex + 1;
-	
-					pageFlip = this.currentMasterPage + 1;
-					pageFlip = pageFlip > 2 ? 0 : pageFlip;
-					this.masterPages[pageFlip].style.left = this.page * 100 + 100 + '%';
-	
-					pageFlipIndex = this.page + 1;
-				}
-	
-				// Add active class to current page
-				className = this.masterPages[this.currentMasterPage].className;
-				/(^|\s)swipeview-active(\s|$)/.test(className) || (this.masterPages[this.currentMasterPage].className = !className ? 'swipeview-active' : className + ' swipeview-active');
-	
-				// Add loading class to flipped page
-				className = this.masterPages[pageFlip].className;
-				/(^|\s)swipeview-loading(\s|$)/.test(className) || (this.masterPages[pageFlip].className = !className ? 'swipeview-loading' : className + ' swipeview-loading');
-				
-				pageFlipIndex = pageFlipIndex - Math.floor(pageFlipIndex / this.options.numberOfPages) * this.options.numberOfPages;
-				this.masterPages[pageFlip].dataset.upcomingPageIndex = pageFlipIndex;		// Index to be loaded in the newly flipped page
-	
-				this.slider.style.webkitTransitionDuration = '500ms';
-				
-				newX = -this.page * this.pageWidth;
-	
-				// Hide the next page if we decided to disable looping
-				if (!this.options.loop) {
-					this.masterPages[pageFlip].style.visibility = newX == 0 || newX == this.maxX ? 'hidden' : '';
-				}
-	
-				if (this.x == newX) {
-					this.__flip();		// If we swiped all the way long to the next page (extremely rare but still)
-				} else {
-					this.__pos(newX);
-					if (this.options.hastyPageFlip) this.__flip();
-				}
+			// Flip the page
+			if (this.directionX > 0) {
+				this.page = -Math.ceil(this.x / this.pageWidth);
+				this.currentMasterPage = (this.page + 1) - Math.floor((this.page + 1) / 3) * 3;
+				this.pageIndex = this.pageIndex === 0 ? this.options.numberOfPages - 1 : this.pageIndex - 1;
+
+				pageFlip = this.currentMasterPage - 1;
+				pageFlip = pageFlip < 0 ? 2 : pageFlip;
+				this.masterPages[pageFlip].style.left = this.page * 100 - 100 + '%';
+
+				pageFlipIndex = this.page - 1;
+			} else {
+				this.page = -Math.floor(this.x / this.pageWidth);
+				this.currentMasterPage = (this.page + 1) - Math.floor((this.page + 1) / 3) * 3;
+				this.pageIndex = this.pageIndex == this.options.numberOfPages - 1 ? 0 : this.pageIndex + 1;
+
+				pageFlip = this.currentMasterPage + 1;
+				pageFlip = pageFlip > 2 ? 0 : pageFlip;
+				this.masterPages[pageFlip].style.left = this.page * 100 + 100 + '%';
+
+				pageFlipIndex = this.page + 1;
+			}
+
+			// Add active class to current page
+			className = this.masterPages[this.currentMasterPage].className;
+			/(^|\s)swipeview-active(\s|$)/.test(className) || (this.masterPages[this.currentMasterPage].className = !className ? 'swipeview-active' : className + ' swipeview-active');
+
+			// Add loading class to flipped page
+			className = this.masterPages[pageFlip].className;
+			/(^|\s)swipeview-loading(\s|$)/.test(className) || (this.masterPages[pageFlip].className = !className ? 'swipeview-loading' : className + ' swipeview-loading');
+			
+			pageFlipIndex = pageFlipIndex - Math.floor(pageFlipIndex / this.options.numberOfPages) * this.options.numberOfPages;
+			this.masterPages[pageFlip].dataset.upcomingPageIndex = pageFlipIndex;		// Index to be loaded in the newly flipped page
+
+			this.slider.style.webkitTransitionDuration = '500ms';
+			
+			newX = -this.page * this.pageWidth;
+
+			// Hide the next page if we decided to disable looping
+			if (!this.options.loop) {
+				this.masterPages[pageFlip].style.visibility = newX === 0 || newX == this.maxX ? 'hidden' : '';
+			}
+
+			if (this.x == newX) {
+				this.__flip();		// If we swiped all the way long to the next page (extremely rare but still)
+			} else {
+				this.__pos(newX);
+				if (this.options.hastyPageFlip) this.__flip();
+			}
 	
 		},
 		
@@ -437,7 +438,7 @@ var SwipeView = (function(){
 			if (this.directionY > 0) {
 				this.page = -Math.ceil(this.y / this.pageHeight);
 				this.currentMasterPage2 = (this.page + 1) - Math.floor((this.page + 1) / 3) * 3;
-				this.pageIndex = this.pageIndex == 0 ? this.options.numberOfPhotos - 1 : this.pageIndex - 1;
+				this.pageIndex = this.pageIndex === 0 ? this.options.numberOfPhotos - 1 : this.pageIndex - 1;
 
 				pageFlip = this.currentMasterPage2 - 1;
 				pageFlip = pageFlip < 0 ? 2 : pageFlip;
@@ -457,7 +458,7 @@ var SwipeView = (function(){
 			}
 
 			// Add active class to current page
-			className = this.masterPages2[this.currentMasterPage].className;
+			className = this.masterPages2[this.currentMasterPage2].className;
 			/(^|\s)swipeview-active(\s|$)/.test(className) || (this.masterPages2[this.currentMasterPage2].className = !className ? 'swipeview-active' : className + ' swipeview-active');
 
 			// Add loading class to flipped page
@@ -473,7 +474,7 @@ var SwipeView = (function(){
 
 			// Hide the next page if we decided to disable looping
 			if (!this.options.loop) {
-				this.masterPages2[pageFlip].style.visibility = newY == 0 || newY == this.maxY ? 'hidden' : '';
+				this.masterPages2[pageFlip].style.visibility = newY === 0 || newY == this.maxY ? 'hidden' : '';
 			}
 
 			if (this.y == newY) {
@@ -482,7 +483,7 @@ var SwipeView = (function(){
 				this.__posY(newY);
 				if (this.options.hastyPageFlip) this.__flipY();
 			}
-		},		
+		},
 		
 		__flip: function () {
 			this.__event('flip');
@@ -499,7 +500,7 @@ var SwipeView = (function(){
 				this.masterPages2[i].className = this.masterPages2[i].className.replace(/(^|\s)swipeview-loading(\s|$)/, '');		// Remove the loading class
 				this.masterPages2[i].dataset.pageIndex = this.masterPages2[i].dataset.upcomingPageIndex;
 			}
-		},		
+		},
 		
 		__event: function (type) {
 			var ev = document.createEvent("Event");

@@ -136,7 +136,7 @@
 	  carousel = new SwipeView('#wrapper', {
 	    numberOfPages: slides.length,
 	    numberOfPhotos: photos.length,
-	    hastyPageFlip: false
+	    hastyPageFlip: true
 	  });
 
 	  // Load initial data
@@ -198,8 +198,8 @@
 		        el = carousel.masterPages2[i].querySelector('img');     
 		        el.className = 'loading';
 		        el.src = photos[upcoming].img;
-		        el.width = $('#wrapper').width();
-		        el.height = $('#wrapper').height();
+		        el.width = photos[upcoming].width;
+		        el.height = photos[upcoming].height;
 		        el.id = photos[upcoming].id;                     
 		      }
 		    }     
@@ -208,10 +208,10 @@
 		catch(err)
 		{
 		  //Handle errors here
-		  //alert(err);
+
 		}
 	  });
-
+/*
 	  carousel.onMoveOut(function () {
 	    carousel.masterPages2[carousel.currentMasterPage2].className = carousel.masterPages2[carousel.currentMasterPage2].className.replace(/(^|\s)swipeview-active(\s|$)/, '');
 	  });
@@ -220,6 +220,7 @@
 	    var className = carousel.masterPages2[carousel.currentMasterPage2].className;
 	    /(^|\s)swipeview-active(\s|$)/.test(className) || (carousel.masterPages2[carousel.currentMasterPage2].className = !className ? 'swipeview-active' : className + ' swipeview-active');
 	  });
+*/
 	</script>
 </body>
 </html>

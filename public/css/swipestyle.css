@@ -86,3 +86,9 @@ p {
 	margin:0;
 	font-size:1.4em;
 }
+
+.swipeview-loading img,
+img.loading {
+	-webkit-transition-duration:0;
+	opacity:0;
+}
