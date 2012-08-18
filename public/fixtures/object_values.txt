@@ -1,7 +1,7 @@
 source_name|attrib|object|value
-Live|image_count|39000000000|12|
+Live|image_count|39000000000|57|
 Live|id_last|39000000000|1665|
-Live|s3|39000000000|0|
+Live|s3|39000000000|1|
 Tag|id|1|1|
 Tag|name|1|ability|
 Tag|visible|1|1|
