@@ -86,9 +86,6 @@ $(document).ready(function($) {
     tab_w = w / 3 - 42;
     $('.btm_item').css('width', tab_w);
 
-    if (currentQuote().className == 'y')
-    $('#addtofavorites').css('opacity', '1')
-
     $("#menu").hide();
     //try and register device for push if it hasn't been already
     $.get("/app/Quote/device_token")
