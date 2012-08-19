@@ -83,4 +83,4 @@ disable_screen_rotation = 1
 # hides forward button and animates back button transition
 #jqtouch_mode=1
 
-splash_screen='delay=0;zoom'
+splash_screen='delay=2;center'
