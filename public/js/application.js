@@ -310,9 +310,34 @@ $(document).ready(function($) {
         $("#copyrightcontainer").hide();
     });
 
+
 	$("#searchform").submit(function(e) {
         e.preventDefault();
         var search_term = $('#search').val();
+		_gaq.push(['_trackPageview', 'searchform/' + search_term]);
+		var name = $('input[name=group1]:checked', '#searchform').val();
+        $('#thelist').load('/app/Quote/search_result', {tag: search_term, stype: name},function() {
+            myScroll.refresh();
+            myScroll.scrollTo(0, 0);
+        });
+        $('#search').blur();
+    });
+
+    $("#formsubmit").click(function(e) {
+        e.preventDefault();
+        var search_term = $('#search').val();
+		_gaq.push(['_trackPageview', 'searchform/' + search_term]);
+		var name = $('input[name=group1]:checked', '#searchform').val();
+        $('#thelist').load('/app/Quote/search_result', {tag: search_term, stype: name},function() {
+            myScroll.refresh();
+            myScroll.scrollTo(0, 0);
+        });
+        $('#search').blur();
+    });
+
+    $('input[name=group1]').change(function(e){
+		e.preventDefault();
+		var search_term = $('#search').val();
 		_gaq.push(['_trackPageview', 'searchform/' + search_term]);
 		var name = $('input[name=group1]:checked', '#searchform').val();
         $('#thelist').load('/app/Quote/search_result', {tag: search_term, stype: name},function() {
