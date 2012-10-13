@@ -16,13 +16,27 @@ class Live
     attr_accessor :live
   end
   
+  def self.do_not_backup
+    ['Live','Quote','QuoteTag','QuoteTopic','QuoteTag','Tag','Topic'].each do |mdl|
+      require_model mdl
+      db = Rho::RHO::get_src_db(mdl)
+      db.set_do_not_bakup_attribute(1)
+    end
+  end
+  
+  def self.backup
+    ['Live','Quote','QuoteTag','QuoteTopic','QuoteTag','Tag','Topic'].each do |mdl|
+      require_model mdl
+      db = Rho::RHO::get_src_db(mdl)
+      db.set_do_not_bakup_attribute(0)
+    end
+  end
+  
   def self.image_link(img)
     unless Live.live.device
       device = System.get_property('device_name')
-      puts "device is #{device}"
       Live.live.device = device =~ /iPad/ ? 'ipad' : 'phone'
       Live.live.save
-      puts "live device is #{Live.live.device}"
     end
     platform = System.get_property('platform')
     dir = Live.live.device
@@ -54,8 +68,6 @@ class Live
   def load_and_zip
     #only do pull request if its been 3 minutes since first and still no s3 images found
     if Live.live.start_timer
-      puts "timer is #{Live.live.start_timer}"
-      puts "diff in timer is #{Time.now - Live.live.start_timer}"
       return if Time.now - Live.live.start_timer < 180
     end
     dir = Live.live.device

@@ -133,11 +133,10 @@ class Quote
   end
   
   def self.quote_submit(quote,book,citation)
-    id_last = Live.live.id_last
     Rho::AsyncHttp.post(
       :url =>  "#{URL}/set_quote",
       :headers => {"AUTHORIZATION" => TOKEN},
-      :body => "quote=#{quote}&book=#{book}&citation=#{citation}&id_last=#{id_last}",
+      :body => "quote=#{quote}&book=#{book}&citation=#{citation}",
       :callback => '/app/Quote/submit_quote_callback'
     )
   end

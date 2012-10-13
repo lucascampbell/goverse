@@ -8,7 +8,8 @@ class Topic
 
   #add model specifc code here
   def self.find_active
-    Topic.find(:all,:conditions=>{:visible =>'1'},:order=>'name')
+    t = Topic.find(:all,:conditions=>{:visible =>'1'},:order=>'name')
+    #sort_correctly(t)
   end
   
   def self.find_random_active
@@ -29,5 +30,16 @@ class Topic
     t = Topic.find(:first,:conditions=>{:id=>q.topic_id,:visible=>'1'})
     t = Topic.find(:first,:conditions=>{:id=>q.topic_id}) unless t
     t
+  end
+  
+  private
+  
+  def self.sort_correctly(t)
+    sorted = t.inject([]) do |arr,index|
+      arr << index unless index.id == '57'
+      arr.insert(0,index) if index.id == '57'
+      arr
+    end
+    sorted
   end
 end

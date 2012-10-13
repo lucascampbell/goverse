@@ -93,8 +93,17 @@ class QuoteController < Rho::RhoController
       Quote.image_id = @image
     end
     
+<<<<<<< HEAD
     # Find the specified quote
     @quote = Quote.find(:first,:conditions => {:id => @id})
+=======
+    ### Select quotes in the same topic to fill the carousel; optional: randomize, prioritize and limit the order and amount of quotes
+    @quotes = Quote.find(:all, :conditions => {:topic_id => @quote.topic_id})
+      
+    ### Find topic name  
+    topic = Topic.find(:first, :conditions => {:id => @quote.topic_id})
+    @topic = topic.name 
+>>>>>>> d9978a0c7a9b4f1214c1e18ff136858d87782ba8
     
     # Quote ids are allowed to seized to exist, this will assure a quote is select; optional: inform user     
     if @quote.nil?
@@ -115,13 +124,16 @@ class QuoteController < Rho::RhoController
   ### This is the Push-Notification callback method  
   def push_callback
       q = @params['quote']
+      i = rand(Live.live.image_count.to_i) + 1
+      id = q.to_s + "," + i.to_s
       quote = Quote.find(:first,:conditions => {:id => q})
       Alert.show_popup( {
         :message => quote.quote,
         :title => "Daily Quote",
         :buttons => ["OK"]
       })
-      WebView.execute_js("switchQuote(#{q});")
+      WebView.execute_js("switchQuote(#{id});")
+      #WebView.navigate("/app/Quote/show_by_id?id=#{id}")
   end
   
   def device_token
@@ -189,6 +201,7 @@ class QuoteController < Rho::RhoController
     
     parms = parms.split(',')
     id = parms[0]
+<<<<<<< HEAD
     image = parms[1] 
         
     if image.nil?
@@ -198,13 +211,32 @@ class QuoteController < Rho::RhoController
     quote = Quote.find(:first,:conditions=>{:id => id})
     quote.update_attributes(:favorite => 'y',:favorite_image => image)
     #redirect :action => :ajax_favorites
+=======
+    image = parms[1]        
+    if image.nil?      
+      image = '7'
+    end  
+    quote = Quote.find(:first, :conditions => {:id => id})
+    quote.update_attributes(:favorite => 'y', :favorite_image => image)    
+    render :string => 'ok'
+>>>>>>> d9978a0c7a9b4f1214c1e18ff136858d87782ba8
   end
   
   def unset_favorite 
     id = strip_braces(@params['id'])    
     quote = Quote.find(:first,:conditions=>{:id => id})
     quote.update_attributes(:favorite => 'n')    
+<<<<<<< HEAD
     #redirect :action => :ajax_favorites
+=======
+    render :string => 'ok'
+  end    
+
+  ### This is the only page not loaded by ajax; also the view needs better performance
+  def photos
+    @id = strip_braces(@params['id'])
+    render :layout => false
+>>>>>>> d9978a0c7a9b4f1214c1e18ff136858d87782ba8
   end
   
   def get_topic
@@ -240,7 +272,7 @@ class QuoteController < Rho::RhoController
     topic_id = '56' if topic_id.nil?
     
     @topic_name = Topic.find_by_id(topic_id).name
-    @quotes = Quote.find_by_topic(topic_id)  
+    @quotes = Quote.find_by_topic(topic_id)               
     @font_size = Live.live.device == 'ipad' ? "16px" : "9px"
     render :action => :json_by_topic_id, :layout => false
   end
@@ -267,7 +299,7 @@ class QuoteController < Rho::RhoController
   end
   
   def quote_submit
-    quote = @params['quote'].gsub(";","--8")
+    quote = @params['quote']
     book = @params['book']
     citation = @params['citation']
     Quote.quote_submit(quote,book,citation)
@@ -300,6 +332,7 @@ class QuoteController < Rho::RhoController
     end
   end
  
+<<<<<<< HEAD
   def updatedb
     Quote.updatedb
   end
@@ -390,5 +423,13 @@ class QuoteController < Rho::RhoController
   
   def restart_app
     WebView.navigate('/app/Quote/show_by_id')
+=======
+  ### Return topic name
+  def topic_by_quote_id                      
+    id = strip_braces(@params['id'])
+    quote = Quote.find(:first,:conditions => {:id => id})
+    topic = Topic.find(:first,:conditions => {:id => quote.topic_id})
+    render :string => topic.name 
+>>>>>>> d9978a0c7a9b4f1214c1e18ff136858d87782ba8
   end
 end
